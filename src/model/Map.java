@@ -59,4 +59,17 @@ public class Map {
 		
 		changes.get(c.getTimeStep()).add(c);
 	}
+
+	public static Map GetCurrent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int GetWidth() {
+		return width;
+	}
+	
+	public int GetHeight() {
+		return height;
+	}
 }

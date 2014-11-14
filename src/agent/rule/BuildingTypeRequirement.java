@@ -1,4 +1,4 @@
-package agent;
+package agent.rule;
 
 import model.BUILDINGTYPE;
 

@@ -1,4 +1,4 @@
-package agent;
+package agent.rule;
 
 public abstract class Requirement {
 	public int value = 0;

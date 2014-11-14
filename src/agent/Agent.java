@@ -1,6 +1,16 @@
 package agent;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import agent.rule.BuildingTypeRequirement;
+import agent.rule.CONSTRAINT;
+import agent.rule.Requirement;
+import agent.rule.Rule;
+import agent.rule.TerrainTypeRequirement;
 import model.BUILDINGTYPE;
+import model.Field;
+import model.Map;
 import util.Point2i;
 import util.Rand;
 
@@ -8,10 +18,12 @@ public abstract class Agent {
 	protected Point2i startPos;
 	protected Point2i currentPos;
 	protected BUILDINGTYPE builder; 
+	protected ArrayList<Rule> ruleList;
 	
 	public Agent(Point2i startPos, BUILDINGTYPE type) {
 		this.startPos = startPos;
 		builder = type;
+		
 	}
 	
 	public Point2i getPos() {
@@ -22,8 +34,53 @@ public abstract class Agent {
 		return builder;
 	}
 	
-	public abstract boolean testCurrentField();
+	public boolean testCurrentField() {
+		Map m = Map.GetCurrent();
+		boolean totalCondition = true;
+		for(Rule rule : ruleList){
+			
+			boolean ruleCondition = (rule.getConstraint() == CONSTRAINT.ALL ? true : false);
+			
+			Iterator<Requirement> ite = rule.GetRequirements();
+			while(ite.hasNext()){
+				Requirement req = ite.next();
+				boolean conditionFullfilled = CheckRequirementCondition(m, rule.getRadius(), req);
+				ruleCondition = (rule.getConstraint() == CONSTRAINT.ALL ? 
+						ruleCondition & conditionFullfilled : 
+						ruleCondition | conditionFullfilled);
+				
+			}
+			
+			totalCondition = totalCondition & ruleCondition;
+		}
+		
+		return totalCondition;
+	}
 	
+	private boolean CheckRequirementCondition(Map m, int radius, Requirement req) {
+		int counter = 0;
+		for(int i = (currentPos.x-radius > 0 ? currentPos.x-radius : 0); 
+				i < (currentPos.x+radius < m.GetWidth() ? currentPos.x+radius : m.GetWidth()-1); i++){
+			for(int j = (currentPos.y-radius > 0 ? currentPos.y-radius : 0); 
+			j < (currentPos.y+radius < m.GetHeight() ? currentPos.y+radius : m.GetHeight()-1); j++){
+				Field f = m.getField(new Point2i(i,j));
+				if(req instanceof BuildingTypeRequirement){
+					if(f.buildingType == ((BuildingTypeRequirement) req).getType()) counter++;
+				}
+				if(req instanceof TerrainTypeRequirement){
+					if(f.terrainType == ((TerrainTypeRequirement) req).getType()) counter++;
+				}
+			}
+		}
+		if(req.upperLimit){
+			if(counter<=req.value) return true;
+		}
+		else{
+			if(counter>=req.value) return true;
+		}
+		return false;
+	}
+
 	public abstract Point2i move();
 	
 	protected Point2i baseMove(){

@@ -1,16 +1,15 @@
-package agent;
+package agent.rule;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
-enum CONSTRAINT {
-	ANY, ALL
-}
+
 
 public class Rule {
 	
 	ArrayList<Requirement> requirements;
-	int radius = 0;
-	CONSTRAINT constraint;
+	private int radius = 0;
+	private CONSTRAINT constraint;
 	
 	public Rule(int radius, CONSTRAINT constraint) {
 		this.radius = radius;
@@ -21,5 +20,17 @@ public class Rule {
 	
 	public void addRequirement(Requirement req) {
 		requirements.add(req);
+	}
+	
+	public Iterator<Requirement> GetRequirements(){
+		return requirements.iterator();
+	}
+
+	public int getRadius() {
+		return radius;
+	}
+
+	public CONSTRAINT getConstraint() {
+		return constraint;
 	}
 }
