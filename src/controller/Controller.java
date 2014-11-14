@@ -1,19 +1,29 @@
 package controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-import model.BuildingMap;
+import util.MapHandler;
+import model.Map;
 import agent.Agent;
 
 public class Controller {
 	private ArrayList<Agent> agents;
-	private BuildingMap map;
+	private Map map;
 	
 	private int totalTimeSteps = 1;
 	
 	public Controller() {
 		agents = new ArrayList<Agent>();
-		map = new BuildingMap();
+	}
+	
+	public void loadMapOnPath(String pathToFile) {
+		try {
+			map = MapHandler.loadMap(pathToFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void run() {
@@ -21,7 +31,7 @@ public class Controller {
 			for (Agent agent : agents) {
 				agent.move();
 				if(agent.testCurrentField()) {
-					map.changeField(agent.getPos().x, agent.getPos().y, agent.getBuilderType(), currentTimeStep);
+					map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), currentTimeStep);
 				}	
 			}
 		}

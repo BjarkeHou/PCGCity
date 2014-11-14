@@ -24,8 +24,8 @@ public class Map {
 		
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				map[x][y].terrainType = terrain[x][y];
-				map[x][y].buildingType = BUILDINGTYPE.NONE;
+				Field tempField = new Field(terrain[x][y], BUILDINGTYPE.NONE);
+				map[x][y] = tempField;
 			}
 		}
 	}
