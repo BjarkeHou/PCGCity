@@ -1,17 +1,16 @@
 package model;
 
+import util.Point2i;
+
 public class Change {
-	private int fieldX;
-	private int fieldY;
+	Point2i point;
 	private BUILDINGTYPE presentType;
 	private int timeStep;
 	
-	public int getFieldX() {
-		return fieldX;
+	public Point2i getPoint() {
+		return point;
 	}
-	public int getFieldY() {
-		return fieldY;
-	}
+	
 	public BUILDINGTYPE getPresentType() {
 		return presentType;
 	}
@@ -20,12 +19,10 @@ public class Change {
 		return timeStep;
 	}
 	
-	public Change(int fieldX, int fieldY,
+	public Change(Point2i point,
 			BUILDINGTYPE presentType, int timeStep) {
 		super();
-		this.fieldX = fieldX;
-		this.fieldY = fieldY;
-
+		this.point = point;
 		this.presentType = presentType;
 		this.timeStep = timeStep;
 	}

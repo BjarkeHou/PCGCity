@@ -21,7 +21,7 @@ public class Controller {
 			for (Agent agent : agents) {
 				agent.move();
 				if(agent.testCurrentField()) {
-					map.changeField(agent.getPos().X(), agent.getPos().Y(), agent.getBuilderType(), currentTimeStep);
+					map.changeField(agent.getPos().x, agent.getPos().y, agent.getBuilderType(), currentTimeStep);
 				}	
 			}
 		}
