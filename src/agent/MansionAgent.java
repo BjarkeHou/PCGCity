@@ -18,10 +18,9 @@ public class MansionAgent extends Agent {
 	}
 
 	@Override
-	public Point2i Move() {
-		//if(currentPos.x)
-		//Point2i newPos = currentPos.add(BaseMove());
-		return currentPos;
+	public Point2i move() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
