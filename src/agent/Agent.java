@@ -41,6 +41,8 @@ public abstract class Agent {
 	}
 	
 	public boolean testCurrentField() {
+
+		
 		Map map = this.map;
 		boolean totalCondition = true;
 		for(Rule rule : ruleList){
