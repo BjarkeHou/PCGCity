@@ -3,12 +3,10 @@ package controller;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import util.MapHandler;
-import util.Point2i;
-import util.RuleHandler;
 import model.Map;
+import util.MapHandler;
+import util.RuleHandler;
 import agent.Agent;
-import agent.HutAgent;
 
 public class Controller {
 	private ArrayList<Agent> agents;
@@ -21,9 +19,6 @@ public class Controller {
 	}
 	
 	public void run() {
-		
-		agents.add(new HutAgent(new Point2i(2, 5), map));
-		
 		for (int currentTimeStep = 0; currentTimeStep < totalTimeSteps; currentTimeStep++) {
 			for (Agent agent : agents) {
 				agent.move(currentTimeStep);
