@@ -19,7 +19,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import com.sun.media.jai.opimage.AddCollectionCRIF;
+//import com.sun.media.jai.opimage.AddCollectionCRIF;
 
 import controller.Controller;
 
