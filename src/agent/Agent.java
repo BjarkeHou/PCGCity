@@ -19,11 +19,13 @@ public abstract class Agent {
 	protected Point2i currentPos;
 	protected BUILDINGTYPE builder; 
 	protected ArrayList<Rule> ruleList;
+	private Map map;
 	
-	public Agent(Point2i startPos, BUILDINGTYPE type) {
+	public Agent(Point2i startPos, BUILDINGTYPE type, Map m) {
 		this.startPos = startPos;
 		builder = type;
 		ruleList = new ArrayList<Rule>();
+		map = m;
 	}
 	
 	public void addRule(Rule r){
@@ -39,7 +41,7 @@ public abstract class Agent {
 	}
 	
 	public boolean testCurrentField() {
-		Map map = Map.getCurrent();
+		Map map = this.map;
 		boolean totalCondition = true;
 		for(Rule rule : ruleList){
 			
@@ -97,9 +99,9 @@ public abstract class Agent {
 	private boolean CheckRequirementCondition(Map m, int radius, Requirement req){
 		int counter = 0;
 		for(int i = (currentPos.x()-radius > 0 ? currentPos.x()-radius : 0); 
-				i < (currentPos.x()+1+radius < m.getWidth() ? currentPos.x()+1+radius : m.getWidth()-1); i++){
+				i < (currentPos.x()+1+radius < m.GetWidth() ? currentPos.x()+1+radius : m.GetWidth()-1); i++){
 			for(int j = (currentPos.y()-radius > 0 ? currentPos.y()-radius : 0); 
-			j < (currentPos.y()+1+radius < m.getHeight() ? currentPos.y()+1+radius : m.getHeight()-1); j++){
+			j < (currentPos.y()+1+radius < m.GetHeight() ? currentPos.y()+1+radius : m.GetHeight()-1); j++){
 				Field f = m.getField(new Point2i(i,j));
 				if(req instanceof BuildingTypeRequirement){
 					if(f.buildingType == ((BuildingTypeRequirement) req).getType()) counter++;
