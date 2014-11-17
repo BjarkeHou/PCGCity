@@ -14,7 +14,7 @@ public class Controller {
 	private ArrayList<Agent> agents;
 	private Map map;
 	
-	private int totalTimeSteps = 10;
+	private int totalTimeSteps = 200;
 	
 	public Controller() {
 		agents = new ArrayList<Agent>();
@@ -29,10 +29,12 @@ public class Controller {
 				agent.move(currentTimeStep);
 				if(agent.testCurrentField()) {
 					map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), currentTimeStep);
-					MapHandler.writeMapToFile(map, currentTimeStep);
-				}	
+				}
+				MapHandler.writeMapToFile(map, currentTimeStep);
 			}
 		}
+		
+		agents = new ArrayList<Agent>();
 	}
 
 	public void loadRuleOnPath(String pathToFile) {

@@ -14,7 +14,7 @@ public class Point2i {
 	}
 	
 	public Point2i vecToOther(Point2i other){
-		return new Point2i(this.x-other.x, this.y-other.y);
+		return new Point2i(other.x-this.x, other.y-this.y);
 	}
 	
 	public Point2i clone(){
@@ -45,5 +45,44 @@ public class Point2i {
 			return true;
 		}
 		return false;
+	}
+	
+	public Point2i GetDirUnit(){
+		boolean ortho = checkOrtho();
+		int xUnit = (x != 0 ? 1 : 0);
+		xUnit = (x < 0 ? -xUnit : xUnit);
+		int yUnit = (y != 0 ? 1 : 0);
+		yUnit = (y < 0 ? -yUnit : yUnit);
+		
+		
+		if(ortho){
+			if(Math.abs(x) < Math.abs(y)){
+				return new Point2i(0, yUnit);
+			}
+			else{
+				return new Point2i(xUnit, 0);
+			}
+		}
+		else
+		{
+			return new Point2i(xUnit, yUnit);
+		}
+	}
+
+	private boolean checkOrtho() {
+		if(Math.abs(x) < 2 * Math.abs(y)) return false;
+		if(Math.abs(y) < 2 * Math.abs(x)) return false;
+		return true;
+	}
+
+	public Point2i mapClamp(int limitX, int limitY) {
+		int oldX = x;
+		int oldY = y;
+		if(oldX < 0) oldX = 0;
+		if(oldY < 0) oldY = 0;
+		if(oldX >= limitX) oldX = limitX-1;
+		if(oldY >= limitY) oldY = limitY-1;
+		return new Point2i(oldX, oldY);
+		
 	}
 }

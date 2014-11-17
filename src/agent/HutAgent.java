@@ -41,10 +41,16 @@ public class HutAgent extends Agent {
 	@Override
 	public Point2i move(int timestep) {
 		Point2i move = currentPos;
-		move = move.add(baseMove());
-		double maxRadius = Math.sqrt(timestep)/2;
-		if(distToStart() > maxRadius) move = move.add(dirToStart());
-		return move.add(currentPos);
+		Point2i newMove = move.add(baseMove());
+		double maxRadius = Math.sqrt(timestep)/2.0;
+		double dist = distToStart();
+		if(dist > maxRadius) {
+			Point2i dirToS = dirToStart();
+			newMove = newMove.add(dirToS);
+		}
+		newMove = limitMove(newMove);
+		this.currentPos = newMove;
+		return newMove;
 	}
 
 }

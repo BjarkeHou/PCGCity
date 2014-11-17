@@ -70,8 +70,8 @@ public class MapHandler {
 		}
 		
 		//outMap.setRGB(0, 0, map.getWidth(), map.getHeight(), pixels, 0, 0);
-		
-		File file = new File("/Users/bjarkehou/Desktio/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
+		//File file = new File("/Users/bjarkehou/Desktio/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
+		File file = new File("D:\\Documents\\Google Drive\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
 		try {
 			ImageIO.write(outMap, "png", file);
 		} catch (IOException e) {

@@ -79,29 +79,24 @@ public abstract class Agent {
 	
 	protected Point2i dirToStart(){
 		Point2i vec = currentPos.vecToOther(startPos);
-		boolean ortho = checkOrtho(vec);
-		if(ortho){
-			if(Math.abs(vec.x()) < Math.abs(vec.y())){
-				return new Point2i(0, vec.y()/Math.abs(vec.y()));
-			}
-			else{
-				return new Point2i(vec.x()/Math.abs(vec.x()), 0);
-			}
-		}
-		else
-		{
-			return new Point2i(vec.x()/Math.abs(vec.x()), vec.y()/Math.abs(vec.y()));
-		}
+		return vec.GetDirUnit();
+		
 	}
 
 	protected double distToStart(){
 		return currentPos.distanceTo(startPos);
 	}
+	
+	protected Point2i limitMove(Point2i sMove){
+		return sMove.mapClamp(8,8);
+	}
+	
 	private boolean CheckRequirementCondition(Map m, int radius, Requirement req){
 		int counter = 0;
-		for(int i = (currentPos.x()-radius > 0 ? currentPos.x()-radius : 0); i < (currentPos.x()+1+radius < m.getWidth() ? currentPos.x()+1+radius : m.getWidth()-1); i++){
+		for(int i = (currentPos.x()-radius > 0 ? currentPos.x()-radius : 0); 
+		i < (currentPos.x()+2+radius < m.getWidth() ? currentPos.x()+2+radius : m.getWidth()); i++){
 			for(int j = (currentPos.y()-radius > 0 ? currentPos.y()-radius : 0); 
-			j < (currentPos.y()+1+radius < m.getHeight() ? currentPos.y()+1+radius : m.getHeight()-1); j++){
+			j < (currentPos.y()+2+radius < m.getHeight() ? currentPos.y()+2+radius : m.getHeight()); j++){
 				Field f = m.getField(new Point2i(i,j));
 				if(req instanceof BuildingTypeRequirement){
 					if(f.buildingType == ((BuildingTypeRequirement) req).getType()) counter++;
@@ -118,11 +113,5 @@ public abstract class Agent {
 			if(counter>=req.value) return true;
 		}
 		return false;
-	}
-
-	private boolean checkOrtho(Point2i vec) {
-		if(Math.abs(vec.x()) < 2 * Math.abs(vec.y())) return false;
-		if(Math.abs(vec.y()) < 2 * Math.abs(vec.x())) return false;
-		return true;
 	}
 }
