@@ -35,7 +35,7 @@ public abstract class Agent {
 	}
 	
 	public boolean testCurrentField() {
-		Map m = Map.GetCurrent();
+		Map map = Map.GetCurrent();
 		boolean totalCondition = true;
 		for(Rule rule : ruleList){
 			
@@ -44,7 +44,7 @@ public abstract class Agent {
 			Iterator<Requirement> ite = rule.GetRequirements();
 			while(ite.hasNext()){
 				Requirement req = ite.next();
-				boolean conditionFullfilled = CheckRequirementCondition(m, rule.getRadius(), req);
+				boolean conditionFullfilled = CheckRequirementCondition(map, rule.getRadius(), req);
 				ruleCondition = (rule.getConstraint() == CONSTRAINT.ALL ? 
 						ruleCondition & conditionFullfilled : 
 						ruleCondition | conditionFullfilled);
@@ -57,13 +57,13 @@ public abstract class Agent {
 		return totalCondition;
 	}
 	
-	private boolean CheckRequirementCondition(Map m, int radius, Requirement req) {
+	private boolean CheckRequirementCondition(Map map, int radius, Requirement req) {
 		int counter = 0;
 		for(int i = (currentPos.x-radius > 0 ? currentPos.x-radius : 0); 
-				i < (currentPos.x+radius < m.GetWidth() ? currentPos.x+radius : m.GetWidth()-1); i++){
+				i < (currentPos.x+radius < map.GetWidth() ? currentPos.x+radius : map.GetWidth()-1); i++){
 			for(int j = (currentPos.y-radius > 0 ? currentPos.y-radius : 0); 
-			j < (currentPos.y+radius < m.GetHeight() ? currentPos.y+radius : m.GetHeight()-1); j++){
-				Field f = m.getField(new Point2i(i,j));
+			j < (currentPos.y+radius < map.GetHeight() ? currentPos.y+radius : map.GetHeight()-1); j++){
+				Field f = map.getField(new Point2i(i,j));
 				if(req instanceof BuildingTypeRequirement){
 					if(f.buildingType == ((BuildingTypeRequirement) req).getType()) counter++;
 				}

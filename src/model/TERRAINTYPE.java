@@ -1,5 +1,5 @@
 package model;
 
 public enum TERRAINTYPE {
-	WATER, ROCK, FIELD
+	OUTERSPACE, WATER, ROCK, FIELD
 }
