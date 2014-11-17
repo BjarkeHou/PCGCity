@@ -19,11 +19,13 @@ public abstract class Agent {
 	protected Point2i currentPos;
 	protected BUILDINGTYPE builder; 
 	protected ArrayList<Rule> ruleList;
+	private Map map;
 	
-	public Agent(Point2i startPos, BUILDINGTYPE type) {
+	public Agent(Point2i startPos, BUILDINGTYPE type, Map m) {
 		this.startPos = startPos;
 		builder = type;
 		ruleList = new ArrayList<Rule>();
+		map = m;
 	}
 	
 	public void addRule(Rule r){
@@ -39,7 +41,7 @@ public abstract class Agent {
 	}
 	
 	public boolean testCurrentField() {
-		Map map = Map.GetCurrent();
+		Map map = this.map;
 		boolean totalCondition = true;
 		for(Rule rule : ruleList){
 			

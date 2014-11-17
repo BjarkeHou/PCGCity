@@ -14,8 +14,8 @@ import util.Point2i;
 
 public class HutAgent extends Agent {
 
-	public HutAgent(Point2i startPos) {
-		super(startPos, BUILDINGTYPE.HUT);
+	public HutAgent(Point2i startPos, Map map) {
+		super(startPos, BUILDINGTYPE.HUT, map);
 		Rule r1 = new Rule(1, CONSTRAINT.ANY);
 		r1.addRequirement(new BuildingTypeRequirement(1, false, BUILDINGTYPE.STARTPOSITION));
 		r1.addRequirement(new BuildingTypeRequirement(1, false, BUILDINGTYPE.HUT));
