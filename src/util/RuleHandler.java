@@ -13,21 +13,11 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import agent.rule.BuildingTypeRequirement;
-import agent.rule.CONSTRAINT;
-import agent.rule.Requirement;
-import agent.rule.Rule;
 import agent.rule.TerrainTypeRequirement;
+import agent.rule.CONSTRAINT;
+import agent.rule.Rule;
 
 public class RuleHandler {
-	// This class will consist of static methods, to load in JSON files containings rules.
-	
-	// Load in JSON file
-	// Parse JSON to a set of rules with requirements
-	
-	// Forloop over regler
-	// Forloop over requirements
-	
-	// Return those requirements
 	
 	public static ArrayList<Rule> loadRulesFromFile(String pathToFile) throws IOException {
 		if(pathToFile.isEmpty())
@@ -46,7 +36,8 @@ public class RuleHandler {
 				
 				String constraint = (String)jRule.get("CONSTRAINT");
 				boolean isAll = constraint.equals("ALL");
-				Rule newRule = new Rule((Integer)jRule.get("RADIUS"), isAll ? CONSTRAINT.ALL : CONSTRAINT.ANY);
+				long radius = (long)jRule.get("RADIUS");
+				Rule newRule = new Rule((int)radius, isAll ? CONSTRAINT.ALL : CONSTRAINT.ANY);
 				
 				JSONArray jRequirements = (JSONArray) jRule.get("REQUIREMENTS");
 				
@@ -54,17 +45,17 @@ public class RuleHandler {
 					JSONObject jReq = (JSONObject) _req;
 					
 					String reqType = (String)jReq.get("TYPE");
-					int value = (Integer)jReq.get("VAL");
+					long value = (long)jReq.get("VAL");
 					boolean isUpperLimit = (boolean)jReq.get("UPPERLIMIT");
 					
 					switch (reqType) {
 					case "BUILDING":
 						BUILDINGTYPE buildingType = getBuildingType((String)jReq.get("TARGET"));
-						newRule.addRequirement(new BuildingTypeRequirement(value, isUpperLimit, buildingType));
+						newRule.addRequirement(new BuildingTypeRequirement((int)value, isUpperLimit, buildingType));
 						break;
 					case "TERRAIN":
 						TERRAINTYPE terrainType = getTerrainType((String)jReq.get("TARGET"));
-						newRule.addRequirement(new TerrainTypeRequirement(value, isUpperLimit, terrainType));
+						newRule.addRequirement(new TerrainTypeRequirement((int)value, isUpperLimit, terrainType));
 						break;
 					default:
 						break;
