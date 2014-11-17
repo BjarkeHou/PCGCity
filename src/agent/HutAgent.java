@@ -1,5 +1,6 @@
 package agent;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 import agent.rule.BuildingTypeRequirement;
@@ -11,6 +12,7 @@ import model.BUILDINGTYPE;
 import model.Map;
 import model.TERRAINTYPE;
 import util.Point2i;
+import util.RuleHandler;
 
 public class HutAgent extends Agent {
 
@@ -28,6 +30,12 @@ public class HutAgent extends Agent {
 		ruleList.add(r1);
 		ruleList.add(r2);
 		ruleList.add(r3);
+//		try {
+//			ruleList = RuleHandler.loadRulesFromFile("/Users/bjarkehou/Desktop/RulesData.json");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	@Override
