@@ -61,9 +61,9 @@ public class AppWindow {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 325, 79, 0};
-		gridBagLayout.rowHeights = new int[]{53, 0, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{53, 0, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
 		
 		JLabel lblLoadAMap = new JLabel("Load a map");
@@ -110,7 +110,7 @@ public class AppWindow {
 		
 		JButton btnLoadRule = new JButton("Load");
 		GridBagConstraints gbc_btnLoadRule = new GridBagConstraints();
-		gbc_btnLoadRule.insets = new Insets(0, 0, 0, 5);
+		gbc_btnLoadRule.insets = new Insets(0, 0, 5, 5);
 		gbc_btnLoadRule.gridx = 0;
 		gbc_btnLoadRule.gridy = 3;
 		frame.getContentPane().add(btnLoadRule, gbc_btnLoadRule);
@@ -118,10 +118,17 @@ public class AppWindow {
 		final JEditorPane dtrpnPathToRule = new JEditorPane();
 		GridBagConstraints gbc_dtrpnPathToRule = new GridBagConstraints();
 		gbc_dtrpnPathToRule.fill = GridBagConstraints.BOTH;
-		gbc_dtrpnPathToRule.insets = new Insets(0, 0, 0, 5);
+		gbc_dtrpnPathToRule.insets = new Insets(0, 0, 5, 5);
 		gbc_dtrpnPathToRule.gridx = 1;
 		gbc_dtrpnPathToRule.gridy = 3;
 		frame.getContentPane().add(dtrpnPathToRule, gbc_dtrpnPathToRule);
+		
+		JButton btnGo = new JButton("GO!");
+		GridBagConstraints gbc_btnGo = new GridBagConstraints();
+		gbc_btnGo.insets = new Insets(0, 0, 0, 5);
+		gbc_btnGo.gridx = 1;
+		gbc_btnGo.gridy = 6;
+		frame.getContentPane().add(btnGo, gbc_btnGo);
 		
 		btnLoadMap.addActionListener(new ActionListener() {
 			
@@ -143,11 +150,12 @@ public class AppWindow {
 			}
 		});
 		
-		btnLoadRule.addActionListener(new ActionListener() {
+		btnGo.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				con.loadRuleOnPath(dtrpnPathToRule.getText());
+				// TODO Auto-generated method stub
+				con.run();
 			}
 		});
 	}

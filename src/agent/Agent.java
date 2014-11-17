@@ -23,6 +23,7 @@ public abstract class Agent {
 	
 	public Agent(Point2i startPos, BUILDINGTYPE type, Map m) {
 		this.startPos = startPos;
+		this.currentPos = startPos;
 		builder = type;
 		ruleList = new ArrayList<Rule>();
 		map = m;
@@ -98,8 +99,7 @@ public abstract class Agent {
 	}
 	private boolean CheckRequirementCondition(Map m, int radius, Requirement req){
 		int counter = 0;
-		for(int i = (currentPos.x()-radius > 0 ? currentPos.x()-radius : 0); 
-				i < (currentPos.x()+1+radius < m.getWidth() ? currentPos.x()+1+radius : m.getWidth()-1); i++){
+		for(int i = (currentPos.x()-radius > 0 ? currentPos.x()-radius : 0); i < (currentPos.x()+1+radius < m.getWidth() ? currentPos.x()+1+radius : m.getWidth()-1); i++){
 			for(int j = (currentPos.y()-radius > 0 ? currentPos.y()-radius : 0); 
 			j < (currentPos.y()+1+radius < m.getHeight() ? currentPos.y()+1+radius : m.getHeight()-1); j++){
 				Field f = m.getField(new Point2i(i,j));

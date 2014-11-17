@@ -25,6 +25,10 @@ public class Map {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				Field tempField = new Field(terrain[x][y], BUILDINGTYPE.NONE);
+				
+				if(x==2 && y==5)
+					tempField.buildingType = BUILDINGTYPE.STARTPOSITION;
+				
 				map[x][y] = tempField;				
 			}
 		}
