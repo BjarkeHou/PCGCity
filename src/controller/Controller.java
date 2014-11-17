@@ -29,7 +29,7 @@ public class Controller {
 	public void run() {
 		for (int currentTimeStep = 0; currentTimeStep < totalTimeSteps; currentTimeStep++) {
 			for (Agent agent : agents) {
-				agent.move();
+				agent.move(currentTimeStep);
 				if(agent.testCurrentField()) {
 					map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), currentTimeStep);
 				}	

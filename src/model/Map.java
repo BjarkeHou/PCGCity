@@ -31,15 +31,15 @@ public class Map {
 	}
 	
 	public Field getField(Point2i point) {
-		if((point.x >= 0 && point.x < width) && (point.y>=0 && point.y < height))
-			return map[point.x][point.y];
+		if((point.x() >= 0 && point.x() < width) && (point.y()>=0 && point.y() < height))
+			return map[point.x()][point.y()];
 		else return null;
 	}
 	
 	public BUILDINGTYPE getBuildingTypeForTimestep(Point2i point, int timestep) {
 		for (int i = timestep; i >= 0 ; i--) {
 			for (Change change : changes.get(i)) {
-				if(change.getPoint().x == point.x && change.getPoint().y == point.y) {
+				if(change.getPoint().x() == point.x() && change.getPoint().y() == point.y()) {
 					return change.getPresentType();
 				}
 			}
@@ -48,7 +48,7 @@ public class Map {
 	}
 	
 	public void changeBuildingTypeOnField(Point2i point, BUILDINGTYPE newType, int timestep) {
-		map[point.x][point.y].buildingType = newType;
+		map[point.x()][point.y()].buildingType = newType;
 		addChange(new Change(point, newType, timestep));
 	}
 	
