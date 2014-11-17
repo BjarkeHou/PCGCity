@@ -25,7 +25,7 @@ public class Map {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				Field tempField = new Field(terrain[x][y], BUILDINGTYPE.NONE);
-				map[x][y] = tempField;
+				map[x][y] = tempField;				
 			}
 		}
 	}
@@ -60,16 +60,16 @@ public class Map {
 		changes.get(c.getTimeStep()).add(c);
 	}
 
-	public static Map GetCurrent() {
+	public static Map getCurrent() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public int GetWidth() {
+	public int getWidth() {
 		return width;
 	}
 	
-	public int GetHeight() {
+	public int getHeight() {
 		return height;
 	}
 }

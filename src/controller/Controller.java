@@ -24,6 +24,7 @@ public class Controller {
 				agent.move();
 				if(agent.testCurrentField()) {
 					map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), currentTimeStep);
+					MapHandler.writeMapToFile(map, currentTimeStep);
 				}	
 			}
 		}

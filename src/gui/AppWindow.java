@@ -60,10 +60,10 @@ public class AppWindow {
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 204, 79, 0};
+		gridBagLayout.columnWidths = new int[]{0, 325, 79, 0};
 		gridBagLayout.rowHeights = new int[]{53, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
 		
 		JLabel lblLoadAMap = new JLabel("Load a map");
@@ -75,13 +75,13 @@ public class AppWindow {
 		gbc_lblLoadAMap.gridy = 0;
 		frame.getContentPane().add(lblLoadAMap, gbc_lblLoadAMap);
 		
-		final JLabel mapLabel = new JLabel("");
-		GridBagConstraints gbc_mapLabel = new GridBagConstraints();
-		gbc_mapLabel.gridheight = 2;
-		gbc_mapLabel.insets = new Insets(0, 0, 5, 0);
-		gbc_mapLabel.gridx = 2;
-		gbc_mapLabel.gridy = 0;
-		frame.getContentPane().add(mapLabel, gbc_mapLabel);
+		final JLabel initMap = new JLabel("");
+		GridBagConstraints gbc_initMap = new GridBagConstraints();
+		gbc_initMap.gridheight = 2;
+		gbc_initMap.insets = new Insets(0, 0, 5, 0);
+		gbc_initMap.gridx = 2;
+		gbc_initMap.gridy = 0;
+		frame.getContentPane().add(initMap, gbc_initMap);
 		
 		JButton btnLoadMap = new JButton("Load");
 		GridBagConstraints gbc_btnLoadMap = new GridBagConstraints();
@@ -117,6 +117,7 @@ public class AppWindow {
 		
 		final JEditorPane dtrpnPathToRule = new JEditorPane();
 		GridBagConstraints gbc_dtrpnPathToRule = new GridBagConstraints();
+		gbc_dtrpnPathToRule.fill = GridBagConstraints.BOTH;
 		gbc_dtrpnPathToRule.insets = new Insets(0, 0, 0, 5);
 		gbc_dtrpnPathToRule.gridx = 1;
 		gbc_dtrpnPathToRule.gridy = 3;
@@ -128,19 +129,16 @@ public class AppWindow {
 			public void actionPerformed(ActionEvent arg0) {
 				if(!dtrpnPathToMap.getText().isEmpty()) {
 					con.loadMapOnPath(dtrpnPathToMap.getText());
-					
 					BufferedImage map;
 					try {
 						map = ImageIO.read(new File(dtrpnPathToMap.getText()));
 						
-						mapLabel.setIcon(new ImageIcon(map.getScaledInstance(400, 400, Image.SCALE_SMOOTH)));
+						initMap.setIcon(new ImageIcon(map.getScaledInstance(400, 400, Image.SCALE_SMOOTH)));
 						
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
-					
 				}	
 			}
 		});
