@@ -61,9 +61,9 @@ public class AppWindow {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 204, 79, 0};
-		gridBagLayout.rowHeights = new int[]{53, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowHeights = new int[]{53, 0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
 		
 		JLabel lblLoadAMap = new JLabel("Load a map");
@@ -85,7 +85,7 @@ public class AppWindow {
 		
 		JButton btnLoadMap = new JButton("Load");
 		GridBagConstraints gbc_btnLoadMap = new GridBagConstraints();
-		gbc_btnLoadMap.insets = new Insets(0, 0, 0, 5);
+		gbc_btnLoadMap.insets = new Insets(0, 0, 5, 5);
 		gbc_btnLoadMap.gridx = 0;
 		gbc_btnLoadMap.gridy = 1;
 		frame.getContentPane().add(btnLoadMap, gbc_btnLoadMap);
@@ -93,11 +93,34 @@ public class AppWindow {
 		final JEditorPane dtrpnPathToMap = new JEditorPane();
 		dtrpnPathToMap.setToolTipText("Path to map ...");
 		GridBagConstraints gbc_dtrpnPathToMap = new GridBagConstraints();
-		gbc_dtrpnPathToMap.insets = new Insets(0, 0, 0, 5);
+		gbc_dtrpnPathToMap.insets = new Insets(0, 0, 5, 5);
 		gbc_dtrpnPathToMap.fill = GridBagConstraints.BOTH;
 		gbc_dtrpnPathToMap.gridx = 1;
 		gbc_dtrpnPathToMap.gridy = 1;
 		frame.getContentPane().add(dtrpnPathToMap, gbc_dtrpnPathToMap);
+		
+		JLabel lblLoadARule = new JLabel("Load a rule");
+		lblLoadARule.setFont(new Font("Lucida Grande", Font.PLAIN, 24));
+		GridBagConstraints gbc_lblLoadARule = new GridBagConstraints();
+		gbc_lblLoadARule.gridwidth = 2;
+		gbc_lblLoadARule.insets = new Insets(0, 0, 5, 5);
+		gbc_lblLoadARule.gridx = 0;
+		gbc_lblLoadARule.gridy = 2;
+		frame.getContentPane().add(lblLoadARule, gbc_lblLoadARule);
+		
+		JButton btnLoadRule = new JButton("Load");
+		GridBagConstraints gbc_btnLoadRule = new GridBagConstraints();
+		gbc_btnLoadRule.insets = new Insets(0, 0, 0, 5);
+		gbc_btnLoadRule.gridx = 0;
+		gbc_btnLoadRule.gridy = 3;
+		frame.getContentPane().add(btnLoadRule, gbc_btnLoadRule);
+		
+		final JEditorPane dtrpnPathToRule = new JEditorPane();
+		GridBagConstraints gbc_dtrpnPathToRule = new GridBagConstraints();
+		gbc_dtrpnPathToRule.insets = new Insets(0, 0, 0, 5);
+		gbc_dtrpnPathToRule.gridx = 1;
+		gbc_dtrpnPathToRule.gridy = 3;
+		frame.getContentPane().add(dtrpnPathToRule, gbc_dtrpnPathToRule);
 		
 		btnLoadMap.addActionListener(new ActionListener() {
 			
@@ -119,6 +142,14 @@ public class AppWindow {
 					
 					
 				}	
+			}
+		});
+		
+		btnLoadRule.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				con.loadRuleOnPath(dtrpnPathToRule.getText());
 			}
 		});
 	}

@@ -39,7 +39,7 @@ public abstract class Agent {
 	}
 	
 	public boolean testCurrentField() {
-		Map m = Map.GetCurrent();
+		Map map = Map.GetCurrent();
 		boolean totalCondition = true;
 		for(Rule rule : ruleList){
 			
@@ -48,7 +48,7 @@ public abstract class Agent {
 			Iterator<Requirement> ite = rule.GetRequirements();
 			while(ite.hasNext()){
 				Requirement req = ite.next();
-				boolean conditionFullfilled = CheckRequirementCondition(m, rule.getRadius(), req);
+				boolean conditionFullfilled = CheckRequirementCondition(map, rule.getRadius(), req);
 				ruleCondition = (rule.getConstraint() == CONSTRAINT.ALL ? 
 						ruleCondition & conditionFullfilled : 
 						ruleCondition | conditionFullfilled);
@@ -94,8 +94,7 @@ public abstract class Agent {
 	protected double distToStart(){
 		return currentPos.distanceTo(startPos);
 	}
-
-	private boolean CheckRequirementCondition(Map m, int radius, Requirement req) {
+	private boolean CheckRequirementCondition(Map m, int radius, Requirement req){
 		int counter = 0;
 		for(int i = (currentPos.x()-radius > 0 ? currentPos.x()-radius : 0); 
 				i < (currentPos.x()+1+radius < m.GetWidth() ? currentPos.x()+1+radius : m.GetWidth()-1); i++){
