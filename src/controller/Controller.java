@@ -12,7 +12,7 @@ public class Controller {
 	private ArrayList<Agent> agents;
 	private Map map;
 	
-	private int totalTimeSteps = 1;
+	private int totalTimeSteps = 2;
 	
 	public Controller() {
 		agents = new ArrayList<Agent>();
