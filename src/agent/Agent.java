@@ -88,15 +88,15 @@ public abstract class Agent {
 	}
 	
 	protected Point2i limitMove(Point2i sMove){
-		return sMove.mapClamp(8,8);
+		return sMove.mapClamp(map.getWidth(),map.getHeight());
 	}
 	
 	private boolean CheckRequirementCondition(Map m, int radius, Requirement req){
 		int counter = 0;
 		for(int i = (currentPos.x()-radius > 0 ? currentPos.x()-radius : 0); 
-		i < (currentPos.x()+2+radius < m.getWidth() ? currentPos.x()+2+radius : m.getWidth()); i++){
+		i < (currentPos.x()+1+radius < m.getWidth() ? currentPos.x()+1+radius : m.getWidth()); i++){
 			for(int j = (currentPos.y()-radius > 0 ? currentPos.y()-radius : 0); 
-			j < (currentPos.y()+2+radius < m.getHeight() ? currentPos.y()+2+radius : m.getHeight()); j++){
+			j < (currentPos.y()+1+radius < m.getHeight() ? currentPos.y()+1+radius : m.getHeight()); j++){
 				Field f = m.getField(new Point2i(i,j));
 				if(req instanceof BuildingTypeRequirement){
 					if(f.buildingType == ((BuildingTypeRequirement) req).getType()) counter++;

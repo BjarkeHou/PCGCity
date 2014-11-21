@@ -18,18 +18,18 @@ public class HutAgent extends Agent {
 
 	public HutAgent(Point2i startPos, Map map) {
 		super(startPos, BUILDINGTYPE.HUT, map);
+		Rule r3 = new Rule(0, CONSTRAINT.ALL);
+		r3.addRequirement(new BuildingTypeRequirement(1, false, BUILDINGTYPE.NONE));
+		r3.addRequirement(new TerrainTypeRequirement(1, false, TERRAINTYPE.FIELD));
 		Rule r1 = new Rule(1, CONSTRAINT.ANY);
 		r1.addRequirement(new BuildingTypeRequirement(1, false, BUILDINGTYPE.STARTPOSITION));
 		r1.addRequirement(new BuildingTypeRequirement(1, false, BUILDINGTYPE.HUT));
 		Rule r2 = new Rule(1, CONSTRAINT.ALL);
-		r2.addRequirement(new BuildingTypeRequirement(4, true, BUILDINGTYPE.HUT));
-		Rule r3 = new Rule(0, CONSTRAINT.ALL);
-		r3.addRequirement(new BuildingTypeRequirement(1, false, BUILDINGTYPE.NONE));
-		r3.addRequirement(new TerrainTypeRequirement(1, false, TERRAINTYPE.FIELD));
-		
+		r2.addRequirement(new BuildingTypeRequirement(3, true, BUILDINGTYPE.HUT));
+
+		ruleList.add(r3);
 		ruleList.add(r1);
 		ruleList.add(r2);
-		ruleList.add(r3);
 //		try {
 //			ruleList = RuleHandler.loadRulesFromFile("/Users/bjarkehou/Desktop/RulesData.json");
 //		} catch (IOException e) {
