@@ -48,9 +48,24 @@ public class MapHandler {
 
 	public static void writeMapToFile(Map map, int timeStep) {
 
-		BufferedImage outMap = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		//int[] pixels = new int[map.getWidth() * map.getHeight()];
+		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		img = translateMap(map, img);
 		
+		File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
+		try {
+			ImageIO.write(img, "png", file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static BufferedImage convertMapToImage(Map map) {
+		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		return translateMap(map, img);
+	}
+	
+	private static BufferedImage translateMap(Map map, BufferedImage outMap) {
 		for (int y = 0; y < map.getHeight(); y++) {
 			for (int x = 0; x < map.getWidth(); x++) {
 				Point2i point = new Point2i(x, y);
@@ -66,17 +81,7 @@ public class MapHandler {
 				}
 			}
 		}
-		
-		//outMap.setRGB(0, 0, map.getWidth(), map.getHeight(), pixels, 0, 0);
-		File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
-		//File file = new File("D:\\Documents\\Google Drive\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
-		try {
-			ImageIO.write(outMap, "png", file);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		}
+		return outMap;
 	}
 	
 	private static int getColorForBuildingType(BUILDINGTYPE buildingType) {
