@@ -3,6 +3,7 @@
  */
 package util;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,24 +25,21 @@ public class MapHandler {
 
 		for (int y = 0; y < image.getHeight(); y++) {
 			for (int x = 0; x < image.getWidth(); x++) {
-				final int clr = image.getRGB(x, y);
-				final int red = (clr & 0x00ff0000) >> 16;
-			final int green = (clr & 0x0000ff00) >> 8;
-			final int blue = clr & 0x000000ff;
+				Color c = new Color(image.getRGB(x, y));
 
-			// Color Red get cordinates
-			if (green == 255) {
-				terrain[x][y] = TERRAINTYPE.FIELD;
-			} else if(blue == 255) {
-				terrain[x][y] = TERRAINTYPE.WATER;
-			} else if(red == 0 && green == 0 && blue == 0) {
-				terrain[x][y] = TERRAINTYPE.ROCK;
-			} else {
-				System.out.println(String.format("Coordinate %d %d", x, y));
-				System.out.println("Red Color value = " + red);
-				System.out.println("Green Color value = " + green);
-				System.out.println("Blue Color value = " + blue);
-			}
+				// Color Red get cordinates
+				if (c.getGreen() == 255) {
+					terrain[x][y] = TERRAINTYPE.FIELD;
+				} else if(c.getBlue() == 255) {
+					terrain[x][y] = TERRAINTYPE.WATER;
+				} else if(c.getRed() == 0 && c.getGreen() == 0 && c.getBlue() == 0) {
+					terrain[x][y] = TERRAINTYPE.ROCK;
+				} else {
+					System.out.println(String.format("Coordinate %d %d", x, y));
+					System.out.println("Red Color value = " + c.getRed());
+					System.out.println("Green Color value = " + c.getGreen());
+					System.out.println("Blue Color value = " + c.getBlue());
+				}
 			}
 		}
 
@@ -70,8 +68,8 @@ public class MapHandler {
 		}
 		
 		//outMap.setRGB(0, 0, map.getWidth(), map.getHeight(), pixels, 0, 0);
-		//File file = new File("/Users/bjarkehou/Desktio/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
-		File file = new File("D:\\Documents\\Google Drive\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
+		File file = new File("/Users/bjarkehou/Desktio/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
+		//File file = new File("D:\\Documents\\Google Drive\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
 		try {
 			ImageIO.write(outMap, "png", file);
 		} catch (IOException e) {
@@ -85,15 +83,19 @@ public class MapHandler {
 		switch (buildingType) {
 		case STARTPOSITION:
 			// Create yellow pixel [255,255,0]
-			return (255<<24) | (255<<16) | (255<<8) | 0;
+			//return (255<<24) | (255<<16) | (255<<8) | 0;
+			return new Color(255,255,255,255).getRGB();
 		case HUT:
 			// Create red pixel [200,0,0]
-			return (255<<24) | (200<<16) | (0<<8) | 0;
+//			return (255<<24) | (200<<16) | (0<<8) | 0;
+			return new Color(200,0,0,255).getRGB();
 		case MANSION:
 			// Create darker red pixel [150,0,0]
-			return (255<<24) | (150<<16) | (0<<8) | 0;
+//			return (255<<24) | (150<<16) | (0<<8) | 0;
+			return new Color(150,0,0,255).getRGB();
 		default:
-			return (255<<24) | (255<<16) | (255<<8) | 255;
+//			return (255<<24) | (255<<16) | (255<<8) | 255;
+			return new Color(255,255,255,255).getRGB();
 		}
 	}
 	
@@ -101,18 +103,23 @@ public class MapHandler {
 		switch (terrainType) {
 		case FIELD:
 			// Create green pixel [0,255,0]
-			return (255<<24) | (0<<16) | (255<<8) | 0;
+//			return (255<<24) | (0<<16) | (255<<8) | 0;
+			return new Color(0,255,0,255).getRGB();
 		case ROCK:
 			// Create black pixel [0,0,0]
-			return (255<<24) | (0<<16) | (0<<8) | 0;
+//			return (255<<24) | (0<<16) | (0<<8) | 0;
+			return new Color(0,0,0,255).getRGB();
 		case WATER:
 			// Create blue pixel [0,0,255]
-			return (255<<24) | (0<<16) | (0<<8) | 255;
+//			return (255<<24) | (0<<16) | (0<<8) | 255;
+			return new Color(0,0,255,255).getRGB();
 		case OUTERSPACE:
 			// Create white pixel [255,255,255]
-			return (255<<24) | (255<<16) | (255<<8) | 255;
+//			return (255<<24) | (255<<16) | (255<<8) | 255;
+			return new Color(255,255,255,255).getRGB();
 		default:
-			return (255<<24) | (255<<16) | (255<<8) | 255;
+//			return (255<<24) | (255<<16) | (255<<8) | 255;
+			return new Color(255,255,255,255).getRGB();
 		}
 	}
 
