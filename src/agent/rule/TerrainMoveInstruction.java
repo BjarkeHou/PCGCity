@@ -12,7 +12,7 @@ public class TerrainMoveInstruction extends MoveInstruction {
 		terrain = ter;
 	}
 	
-	TERRAINTYPE getType(){
+	public TERRAINTYPE getType(){
 		return terrain;
 	}
 

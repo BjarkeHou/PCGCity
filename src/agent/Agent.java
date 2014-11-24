@@ -3,11 +3,7 @@ package agent;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import agent.rule.BuildingTypeRequirement;
-import agent.rule.CONSTRAINT;
-import agent.rule.Requirement;
-import agent.rule.Rule;
-import agent.rule.TerrainTypeRequirement;
+import agent.rule.*;
 import model.BUILDINGTYPE;
 import model.Field;
 import model.Map;
@@ -19,6 +15,7 @@ public abstract class Agent {
 	protected Point2i currentPos;
 	protected BUILDINGTYPE builder; 
 	protected ArrayList<Rule> ruleList;
+	protected Point2i moveModifiers;
 	private Map map;
 	
 	public Agent(Point2i startPos, BUILDINGTYPE type, Map m) {
@@ -43,6 +40,7 @@ public abstract class Agent {
 	
 	public boolean testCurrentField() {
 		Map map = this.map;
+		moveModifiers = Point2i.Zero();
 		boolean totalCondition = true;
 		for(Rule rule : ruleList){
 			
@@ -58,13 +56,39 @@ public abstract class Agent {
 				
 			}
 			
+			//check movement
+			if(!ruleCondition){
+
+				Point2i dir = Point2i.Zero();
+				MoveInstruction mi = rule.GetMovement();
+				if(mi.GetMagnitude() > 0){
+					if(mi instanceof BuildingMoveInstruction){
+						BuildingMoveInstruction bmi = (BuildingMoveInstruction) mi;
+						switch (bmi.GetType()){
+							case STARTPOSITION:
+								dir = dirToField(startPos);
+								break;
+							//more types
+							default:
+								break;
+						}
+					}
+					/*if(req instanceof TerrainMoveInstruction){
+					if(f.terrainType == ((TerrainTypeRequirement) req).getType()) counter++;
+					}*/
+				}	
+				moveModifiers = moveModifiers.add(dir.magnitude(mi.GetMagnitude()));
+			}
+			
 			totalCondition = totalCondition & ruleCondition;
 		}
 		
 		return totalCondition;
 	}
 
-	public abstract Point2i move(int timestep);
+	public void move(int timestep){
+		currentPos = limitMove(currentPos.add(moveModifiers).add(baseMove()));
+	}
 	
 	protected Point2i baseMove(){
 		int x = 0;
@@ -77,14 +101,14 @@ public abstract class Agent {
 		
 	}
 	
-	protected Point2i dirToStart(){
-		Point2i vec = currentPos.vecToOther(startPos);
+	protected Point2i dirToField(Point2i field){
+		Point2i vec = currentPos.vecToOther(field);
 		return vec.GetDirUnit();
 		
 	}
 
-	protected double distToStart(){
-		return currentPos.distanceTo(startPos);
+	protected double distToField(Point2i field){
+		return currentPos.distanceTo(field);
 	}
 	
 	protected Point2i limitMove(Point2i sMove)

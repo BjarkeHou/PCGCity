@@ -9,8 +9,8 @@ public abstract class MoveInstruction {
 		magnitude = mag;
 	}
 	
-	MOVEDIR GetMoveDir() {return moveDir;}
-	int GetMagnitude() {return magnitude;}
+	public MOVEDIR GetMoveDir() {return moveDir;}
+	public int GetMagnitude() {return magnitude;}
 	
 	
 }

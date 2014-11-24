@@ -11,6 +11,6 @@ public class BuildingMoveInstruction extends MoveInstruction {
 		building = build;
 	}
 	
-	BUILDINGTYPE GetType() {return building;}
+	public BUILDINGTYPE GetType() {return building;}
 
 }
