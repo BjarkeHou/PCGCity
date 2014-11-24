@@ -61,7 +61,10 @@ public class Controller {
 	}
 	
 	public void addNewAgent() {
-		agents.add(new HutAgent(new Point2i(2, 5), map));
+		if(map == null)
+			return;
+					
+		agents.add(new HutAgent(map.getStartPos(), map));
 		gui.setAmountOfAgentsLbl(agents.size());
 	}
 	
@@ -79,6 +82,9 @@ public class Controller {
 			map = MapHandler.loadMap(pathToFile);
 			gui.setInitialMap(MapHandler.convertMapToImage(map));
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

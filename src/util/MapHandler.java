@@ -17,23 +17,27 @@ import model.TERRAINTYPE;
 
 public class MapHandler {
 
-	public static Map loadMap(String pathToFile) throws IOException {
-		final File file = new File(pathToFile);
-		final BufferedImage image = ImageIO.read(file);
+	public static Map loadMap(String pathToFile) throws Exception {
+		File file = new File(pathToFile);
+		BufferedImage image = ImageIO.read(file);
 
 		TERRAINTYPE[][] terrain = new TERRAINTYPE[image.getWidth()][image.getHeight()];
-
+		boolean foundAStartPositionBefore = false;
+		Point2i startPos = null;
+		
 		for (int y = 0; y < image.getHeight(); y++) {
 			for (int x = 0; x < image.getWidth(); x++) {
 				Color c = new Color(image.getRGB(x, y));
 
 				// Color Red get cordinates
-				if (c.getGreen() == 255) {
+				if (c.getRed() < 100 && c.getGreen() > 230 && c.getBlue() < 100) {
 					terrain[x][y] = TERRAINTYPE.FIELD;
-				} else if(c.getBlue() == 255) {
+				} else if (c.getRed() < 100 && c.getGreen() < 100 && c.getBlue() > 230) {
 					terrain[x][y] = TERRAINTYPE.WATER;
-				} else if(c.getRed() == 0 && c.getGreen() == 0 && c.getBlue() == 0) {
+				} else if (c.getRed() == 0 && c.getGreen() == 0 && c.getBlue() == 0) {
 					terrain[x][y] = TERRAINTYPE.ROCK;
+				} else if (c.getRed() > 230 && c.getGreen() > 230 && c.getBlue() < 100 && !foundAStartPositionBefore) {
+					startPos = new Point2i(x, y);
 				} else {
 					System.out.println(String.format("Coordinate %d %d", x, y));
 					System.out.println("Red Color value = " + c.getRed());
@@ -42,8 +46,14 @@ public class MapHandler {
 				}
 			}
 		}
-
-		return new Map(image.getWidth(), image.getHeight(), terrain);
+		
+		if(startPos == null) {
+			throw new Exception("Map doesnt contain a start position (marked with yellow)");
+		}
+				
+		Map m = new Map(image.getWidth(), image.getHeight(), terrain, startPos);
+		
+		return m;
 	}
 
 	public static void writeMapToFile(Map map, int timeStep) {
@@ -51,8 +61,8 @@ public class MapHandler {
 		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		img = translateMap(map, img);
 		
-		//File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
-		File file = new File("C:\\Users\\Oragada\\Desktop\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
+		File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
+		//File file = new File("C:\\Users\\Oragada\\Desktop\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
 		try {
 			ImageIO.write(img, "png", file);
 		} catch (IOException e) {
