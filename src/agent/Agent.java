@@ -87,7 +87,8 @@ public abstract class Agent {
 		return currentPos.distanceTo(startPos);
 	}
 	
-	protected Point2i limitMove(Point2i sMove){
+	protected Point2i limitMove(Point2i sMove)
+	{
 		return sMove.mapClamp(map.getWidth(),map.getHeight());
 	}
 	

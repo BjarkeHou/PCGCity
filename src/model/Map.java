@@ -63,12 +63,7 @@ public class Map {
 		
 		changes.get(c.getTimeStep()).add(c);
 	}
-
-	public static Map getCurrent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	public int getWidth() {
 		return width;
 	}
