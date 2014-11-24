@@ -9,15 +9,17 @@ public class Map {
 	private HashMap<Integer, ArrayList<Change>> changes;
 	private int height = 8;
 	private int width = 8;
+	private Point2i startPos;
 	private Field[][] map;
 	
 	public Map() {
 		
 	}
 	
-	public Map(int mapWidth, int mapHeight, TERRAINTYPE[][] terrain) {
+	public Map(int mapWidth, int mapHeight, TERRAINTYPE[][] terrain, Point2i startPos) {
 		width = mapWidth;
 		height = mapHeight;
+		this.startPos = startPos;
 		
 		map = new Field[width][height];
 		changes = new HashMap<Integer, ArrayList<Change>>();
@@ -26,7 +28,7 @@ public class Map {
 			for (int x = 0; x < width; x++) {
 				Field tempField = new Field(terrain[x][y], BUILDINGTYPE.NONE);
 				
-				if(x==2 && y==5)
+				if(x==startPos.x() && y==startPos.y())
 					tempField.buildingType = BUILDINGTYPE.STARTPOSITION;
 				
 				map[x][y] = tempField;				
@@ -70,5 +72,9 @@ public class Map {
 	
 	public int getHeight() {
 		return height;
+	}
+	
+	public Point2i getStartPos() {
+		return startPos;
 	}
 }
