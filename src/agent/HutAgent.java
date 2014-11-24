@@ -1,20 +1,15 @@
 package agent;
 
-import java.io.IOException;
-import java.util.Iterator;
-
 import agent.rule.BuildingMoveInstruction;
 import agent.rule.BuildingTypeRequirement;
 import agent.rule.CONSTRAINT;
 import agent.rule.MOVEDIR;
-import agent.rule.Requirement;
 import agent.rule.Rule;
 import agent.rule.TerrainTypeRequirement;
 import model.BUILDINGTYPE;
 import model.Map;
 import model.TERRAINTYPE;
 import util.Point2i;
-import util.RuleHandler;
 
 public class HutAgent extends Agent {
 
@@ -33,7 +28,7 @@ public class HutAgent extends Agent {
 		r2.addRequirement(new BuildingTypeRequirement(1, false, BUILDINGTYPE.HUT));
 		
 		//It must not be too tight to built here
-		BuildingMoveInstruction m3 = new BuildingMoveInstruction(MOVEDIR.AWAY,1,BUILDINGTYPE.STARTPOSITION);
+		BuildingMoveInstruction m3 = new BuildingMoveInstruction(MOVEDIR.AWAY,2,BUILDINGTYPE.STARTPOSITION);
 		Rule r3 = new Rule(1, CONSTRAINT.ALL, m3);
 		r3.addRequirement(new BuildingTypeRequirement(3, true, BUILDINGTYPE.HUT));
 

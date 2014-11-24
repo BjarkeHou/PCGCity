@@ -34,12 +34,12 @@ public class Controller {
 					map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), timeStep);
 				}
 				agent.move(timeStep);
-				MapHandler.writeMapToFile(map, timeStep);
+				MapHandler.writeMapToFile(map, timeStep, agents);
 			}
 			currentTimeStep++;
 			gui.setCurrentTimeStep(currentTimeStep);
 			gui.updateProgressBar(currentTimeStep);
-			gui.setCurrentMap(MapHandler.convertMapToImage(map));
+			gui.setCurrentMap(MapHandler.convertMapToImage(map, agents));
 		}
 	}
 	
@@ -52,12 +52,12 @@ public class Controller {
 				map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), currentTimeStep);
 			}
 			agent.move(currentTimeStep);
-			MapHandler.writeMapToFile(map, currentTimeStep);
+			MapHandler.writeMapToFile(map, currentTimeStep, agents);
 		}
 		currentTimeStep++;
 		gui.setCurrentTimeStep(currentTimeStep);
 		gui.updateProgressBar(currentTimeStep);
-		gui.setCurrentMap(MapHandler.convertMapToImage(map));
+		gui.setCurrentMap(MapHandler.convertMapToImage(map, agents));
 	}
 	
 	public void addNewAgent() {
@@ -80,7 +80,7 @@ public class Controller {
 	public void loadMapOnPath(String pathToFile) {
 		try {
 			map = MapHandler.loadMap(pathToFile);
-			gui.setInitialMap(MapHandler.convertMapToImage(map));
+			gui.setInitialMap(MapHandler.convertMapToImage(map, agents));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

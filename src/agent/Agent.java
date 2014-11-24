@@ -66,7 +66,8 @@ public abstract class Agent {
 						BuildingMoveInstruction bmi = (BuildingMoveInstruction) mi;
 						switch (bmi.GetType()){
 							case STARTPOSITION:
-								dir = dirToField(startPos);
+								
+								dir = (mi.GetMoveDir() == MOVEDIR.TO ? dirToField(startPos) : dirToField(startPos).invert());
 								break;
 							//more types
 							default:
@@ -87,17 +88,18 @@ public abstract class Agent {
 	}
 
 	public void move(int timestep){
-		currentPos = limitMove(currentPos.add(moveModifiers).add(baseMove()));
+		int mag = (timestep/100)+1;
+		currentPos = limitMove(currentPos.add(moveModifiers).add(baseMove(mag)));
 	}
 	
-	protected Point2i baseMove(){
+	protected Point2i baseMove(int magnitude){
 		int x = 0;
 		int y = 0;
 		while (x==0 && y==0){
 			x = Rand.GetInt(3)-1;
 			y = Rand.GetInt(3)-1;
 		}
-		return new Point2i(x, y);
+		return (new Point2i(x, y)).magnitude(magnitude);
 		
 	}
 	

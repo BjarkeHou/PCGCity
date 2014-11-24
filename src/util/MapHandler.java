@@ -7,9 +7,11 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import agent.Agent;
 import model.BUILDINGTYPE;
 import model.Field;
 import model.Map;
@@ -56,13 +58,13 @@ public class MapHandler {
 		return m;
 	}
 
-	public static void writeMapToFile(Map map, int timeStep) {
+	public static void writeMapToFile(Map map, int timeStep, ArrayList<Agent> agents) {
 
 		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		img = translateMap(map, img);
+		img = translateMap(map, img, agents);
 		
-		File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
-		//File file = new File("C:\\Users\\Oragada\\Desktop\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
+		//File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
+		File file = new File("C:\\Users\\Oragada\\Desktop\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
 		try {
 			ImageIO.write(img, "png", file);
 		} catch (IOException e) {
@@ -71,12 +73,12 @@ public class MapHandler {
 		}
 	}
 	
-	public static BufferedImage convertMapToImage(Map map) {
+	public static BufferedImage convertMapToImage(Map map, ArrayList<Agent> agents) {
 		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		return translateMap(map, img);
+		return translateMap(map, img, agents);
 	}
 	
-	private static BufferedImage translateMap(Map map, BufferedImage outMap) {
+	private static BufferedImage translateMap(Map map, BufferedImage outMap, ArrayList<Agent> agents) {
 		for (int y = 0; y < map.getHeight(); y++) {
 			for (int x = 0; x < map.getWidth(); x++) {
 				Point2i point = new Point2i(x, y);
@@ -89,6 +91,11 @@ public class MapHandler {
 					// Der er ikke bygning på feltet, udskriv terrain.
 					//pixels[y*map.getWidth() + x] = getColorForTerrainType(map.getField(point).terrainType);
 					outMap.setRGB(x, y, getColorForTerrainType(field.terrainType));
+				}
+				for(Agent a : agents){
+					if(a.getPos().equals(new Point2i(x,y))){
+						outMap.setRGB(x, y, new Color(100,100,100).getRGB());
+					}
 				}
 			}
 		}
