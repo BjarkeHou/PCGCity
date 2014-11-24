@@ -30,10 +30,10 @@ public class Controller {
 	public void doRestOfTimeSteps() {
 		for (int timeStep = currentTimeStep; timeStep < totalTimeSteps; timeStep++) {
 			for (Agent agent : agents) {
-				agent.move(timeStep);
 				if(agent.testCurrentField()) {
 					map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), timeStep);
 				}
+				agent.move(timeStep);
 				MapHandler.writeMapToFile(map, timeStep);
 			}
 			currentTimeStep++;
@@ -48,10 +48,10 @@ public class Controller {
 			return;
 		
 		for (Agent agent : agents) {
-			agent.move(currentTimeStep);
 			if(agent.testCurrentField()) {
 				map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), currentTimeStep);
 			}
+			agent.move(currentTimeStep);
 			MapHandler.writeMapToFile(map, currentTimeStep);
 		}
 		currentTimeStep++;

@@ -8,6 +8,7 @@ import java.util.Iterator;
 public class Rule {
 	
 	ArrayList<Requirement> requirements;
+	MoveInstruction movement;
 	private int radius = 0;
 	private CONSTRAINT constraint;
 	
