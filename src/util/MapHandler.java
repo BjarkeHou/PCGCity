@@ -3,12 +3,15 @@
  */
 package util;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import agent.Agent;
 import model.BUILDINGTYPE;
 import model.Field;
 import model.Map;
@@ -16,43 +19,66 @@ import model.TERRAINTYPE;
 
 public class MapHandler {
 
-	public static Map loadMap(String pathToFile) throws IOException {
-		final File file = new File(pathToFile);
-		final BufferedImage image = ImageIO.read(file);
+	public static Map loadMap(String pathToFile) throws Exception {
+		File file = new File(pathToFile);
+		BufferedImage image = ImageIO.read(file);
 
 		TERRAINTYPE[][] terrain = new TERRAINTYPE[image.getWidth()][image.getHeight()];
-
+		boolean foundAStartPositionBefore = false;
+		Point2i startPos = null;
+		
 		for (int y = 0; y < image.getHeight(); y++) {
 			for (int x = 0; x < image.getWidth(); x++) {
-				final int clr = image.getRGB(x, y);
-				final int red = (clr & 0x00ff0000) >> 16;
-			final int green = (clr & 0x0000ff00) >> 8;
-			final int blue = clr & 0x000000ff;
+				Color c = new Color(image.getRGB(x, y));
 
-			// Color Red get cordinates
-			if (green == 255) {
-				terrain[x][y] = TERRAINTYPE.FIELD;
-			} else if(blue == 255) {
-				terrain[x][y] = TERRAINTYPE.WATER;
-			} else if(red == 0 && green == 0 && blue == 0) {
-				terrain[x][y] = TERRAINTYPE.ROCK;
-			} else {
-				System.out.println(String.format("Coordinate %d %d", x, y));
-				System.out.println("Red Color value = " + red);
-				System.out.println("Green Color value = " + green);
-				System.out.println("Blue Color value = " + blue);
-			}
+				// Color Red get cordinates
+				if (c.getRed() < 100 && c.getGreen() > 230 && c.getBlue() < 100) {
+					terrain[x][y] = TERRAINTYPE.FIELD;
+				} else if (c.getRed() < 100 && c.getGreen() < 100 && c.getBlue() > 230) {
+					terrain[x][y] = TERRAINTYPE.WATER;
+				} else if (c.getRed() == 0 && c.getGreen() == 0 && c.getBlue() == 0) {
+					terrain[x][y] = TERRAINTYPE.ROCK;
+				} else if (c.getRed() > 230 && c.getGreen() > 230 && c.getBlue() < 100 && !foundAStartPositionBefore) {
+					startPos = new Point2i(x, y);
+				} else {
+					System.out.println(String.format("Coordinate %d %d", x, y));
+					System.out.println("Red Color value = " + c.getRed());
+					System.out.println("Green Color value = " + c.getGreen());
+					System.out.println("Blue Color value = " + c.getBlue());
+				}
 			}
 		}
-
-		return new Map(image.getWidth(), image.getHeight(), terrain);
+		
+		if(startPos == null) {
+			throw new Exception("Map doesnt contain a start position (marked with yellow)");
+		}
+				
+		Map m = new Map(image.getWidth(), image.getHeight(), terrain, startPos);
+		
+		return m;
 	}
 
-	public static void writeMapToFile(Map map, int timeStep) {
+	public static void writeMapToFile(Map map, int timeStep, ArrayList<Agent> agents) {
 
-		BufferedImage outMap = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		//int[] pixels = new int[map.getWidth() * map.getHeight()];
+		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		img = translateMap(map, img, agents);
 		
+		//File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
+		File file = new File("C:\\Users\\Oragada\\Desktop\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
+		try {
+			ImageIO.write(img, "png", file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static BufferedImage convertMapToImage(Map map, ArrayList<Agent> agents) {
+		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		return translateMap(map, img, agents);
+	}
+	
+	private static BufferedImage translateMap(Map map, BufferedImage outMap, ArrayList<Agent> agents) {
 		for (int y = 0; y < map.getHeight(); y++) {
 			for (int x = 0; x < map.getWidth(); x++) {
 				Point2i point = new Point2i(x, y);
@@ -66,34 +92,33 @@ public class MapHandler {
 					//pixels[y*map.getWidth() + x] = getColorForTerrainType(map.getField(point).terrainType);
 					outMap.setRGB(x, y, getColorForTerrainType(field.terrainType));
 				}
+				for(Agent a : agents){
+					if(a.getPos().equals(new Point2i(x,y))){
+						outMap.setRGB(x, y, new Color(100,100,100).getRGB());
+					}
+				}
 			}
 		}
-		
-		//outMap.setRGB(0, 0, map.getWidth(), map.getHeight(), pixels, 0, 0);
-		//File file = new File("/Users/bjarkehou/Desktio/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
-		File file = new File("D:\\Documents\\Google Drive\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
-		try {
-			ImageIO.write(outMap, "png", file);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		}
+		return outMap;
 	}
 	
 	private static int getColorForBuildingType(BUILDINGTYPE buildingType) {
 		switch (buildingType) {
 		case STARTPOSITION:
 			// Create yellow pixel [255,255,0]
-			return (255<<24) | (255<<16) | (255<<8) | 0;
+			//return (255<<24) | (255<<16) | (255<<8) | 0;
+			return new Color(255,255,255,255).getRGB();
 		case HUT:
 			// Create red pixel [200,0,0]
-			return (255<<24) | (200<<16) | (0<<8) | 0;
+//			return (255<<24) | (200<<16) | (0<<8) | 0;
+			return new Color(200,0,0,255).getRGB();
 		case MANSION:
 			// Create darker red pixel [150,0,0]
-			return (255<<24) | (150<<16) | (0<<8) | 0;
+//			return (255<<24) | (150<<16) | (0<<8) | 0;
+			return new Color(150,0,0,255).getRGB();
 		default:
-			return (255<<24) | (255<<16) | (255<<8) | 255;
+//			return (255<<24) | (255<<16) | (255<<8) | 255;
+			return new Color(255,255,255,255).getRGB();
 		}
 	}
 	
@@ -101,18 +126,23 @@ public class MapHandler {
 		switch (terrainType) {
 		case FIELD:
 			// Create green pixel [0,255,0]
-			return (255<<24) | (0<<16) | (255<<8) | 0;
+//			return (255<<24) | (0<<16) | (255<<8) | 0;
+			return new Color(0,255,0,255).getRGB();
 		case ROCK:
 			// Create black pixel [0,0,0]
-			return (255<<24) | (0<<16) | (0<<8) | 0;
+//			return (255<<24) | (0<<16) | (0<<8) | 0;
+			return new Color(0,0,0,255).getRGB();
 		case WATER:
 			// Create blue pixel [0,0,255]
-			return (255<<24) | (0<<16) | (0<<8) | 255;
+//			return (255<<24) | (0<<16) | (0<<8) | 255;
+			return new Color(0,0,255,255).getRGB();
 		case OUTERSPACE:
 			// Create white pixel [255,255,255]
-			return (255<<24) | (255<<16) | (255<<8) | 255;
+//			return (255<<24) | (255<<16) | (255<<8) | 255;
+			return new Color(255,255,255,255).getRGB();
 		default:
-			return (255<<24) | (255<<16) | (255<<8) | 255;
+//			return (255<<24) | (255<<16) | (255<<8) | 255;
+			return new Color(255,255,255,255).getRGB();
 		}
 	}
 

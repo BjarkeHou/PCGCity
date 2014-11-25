@@ -3,11 +3,7 @@ package agent;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import agent.rule.BuildingTypeRequirement;
-import agent.rule.CONSTRAINT;
-import agent.rule.Requirement;
-import agent.rule.Rule;
-import agent.rule.TerrainTypeRequirement;
+import agent.rule.*;
 import model.BUILDINGTYPE;
 import model.Field;
 import model.Map;
@@ -19,6 +15,7 @@ public abstract class Agent {
 	protected Point2i currentPos;
 	protected BUILDINGTYPE builder; 
 	protected ArrayList<Rule> ruleList;
+	protected Point2i moveModifiers;
 	private Map map;
 	
 	public Agent(Point2i startPos, BUILDINGTYPE type, Map m) {
@@ -43,6 +40,7 @@ public abstract class Agent {
 	
 	public boolean testCurrentField() {
 		Map map = this.map;
+		moveModifiers = Point2i.Zero();
 		boolean totalCondition = true;
 		for(Rule rule : ruleList){
 			
@@ -58,45 +56,74 @@ public abstract class Agent {
 				
 			}
 			
+			//check movement
+			if(!ruleCondition){
+
+				Point2i dir = Point2i.Zero();
+				MoveInstruction mi = rule.GetMovement();
+				if(mi.GetMagnitude() > 0){
+					if(mi instanceof BuildingMoveInstruction){
+						BuildingMoveInstruction bmi = (BuildingMoveInstruction) mi;
+						switch (bmi.GetType()){
+							case STARTPOSITION:
+								
+								dir = (mi.GetMoveDir() == MOVEDIR.TO ? dirToField(startPos) : dirToField(startPos).invert());
+								break;
+							//more types
+							default:
+								break;
+						}
+					}
+					/*if(req instanceof TerrainMoveInstruction){
+					if(f.terrainType == ((TerrainTypeRequirement) req).getType()) counter++;
+					}*/
+				}	
+				moveModifiers = moveModifiers.add(dir.magnitude(mi.GetMagnitude()));
+			}
+			
 			totalCondition = totalCondition & ruleCondition;
 		}
 		
 		return totalCondition;
 	}
 
-	public abstract Point2i move(int timestep);
+	public void move(int timestep){
+		int mag = (timestep/100)+1;
+		currentPos = limitMove(currentPos.add(moveModifiers).add(baseMove(mag)));
+	}
 	
-	protected Point2i baseMove(){
+	protected Point2i baseMove(int magnitude){
 		int x = 0;
 		int y = 0;
 		while (x==0 && y==0){
 			x = Rand.GetInt(3)-1;
 			y = Rand.GetInt(3)-1;
 		}
-		return new Point2i(x, y);
+		return (new Point2i(x, y)).magnitude(magnitude);
 		
 	}
 	
-	protected Point2i dirToStart(){
-		Point2i vec = currentPos.vecToOther(startPos);
+	protected Point2i dirToField(Point2i field){
+		Point2i vec = currentPos.vecToOther(field);
 		return vec.GetDirUnit();
 		
 	}
 
-	protected double distToStart(){
-		return currentPos.distanceTo(startPos);
+	protected double distToField(Point2i field){
+		return currentPos.distanceTo(field);
 	}
 	
-	protected Point2i limitMove(Point2i sMove){
-		return sMove.mapClamp(8,8);
+	protected Point2i limitMove(Point2i sMove)
+	{
+		return sMove.mapClamp(map.getWidth(),map.getHeight());
 	}
 	
 	private boolean CheckRequirementCondition(Map m, int radius, Requirement req){
 		int counter = 0;
 		for(int i = (currentPos.x()-radius > 0 ? currentPos.x()-radius : 0); 
-		i < (currentPos.x()+2+radius < m.getWidth() ? currentPos.x()+2+radius : m.getWidth()); i++){
+		i < (currentPos.x()+1+radius < m.getWidth() ? currentPos.x()+1+radius : m.getWidth()); i++){
 			for(int j = (currentPos.y()-radius > 0 ? currentPos.y()-radius : 0); 
-			j < (currentPos.y()+2+radius < m.getHeight() ? currentPos.y()+2+radius : m.getHeight()); j++){
+			j < (currentPos.y()+1+radius < m.getHeight() ? currentPos.y()+1+radius : m.getHeight()); j++){
 				Field f = m.getField(new Point2i(i,j));
 				if(req instanceof BuildingTypeRequirement){
 					if(f.buildingType == ((BuildingTypeRequirement) req).getType()) counter++;

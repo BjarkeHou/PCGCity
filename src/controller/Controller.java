@@ -1,37 +1,73 @@
 package controller;
 
+import gui.AppWindow;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
 import model.Map;
 import util.MapHandler;
+import util.Point2i;
 import util.RuleHandler;
 import agent.Agent;
+import agent.HutAgent;
 
 public class Controller {
 	private ArrayList<Agent> agents;
 	private Map map;
+	private AppWindow gui;
 	
 	private int totalTimeSteps = 200;
+	private int currentTimeStep = 0;
 	
 	public Controller() {
 		agents = new ArrayList<Agent>();
+		
+		gui = new AppWindow(this);
+		gui.frame.setVisible(true);
 	}
 	
-	public void run() {
-		for (int currentTimeStep = 0; currentTimeStep < totalTimeSteps; currentTimeStep++) {
+	public void doRestOfTimeSteps() {
+		for (int timeStep = currentTimeStep; timeStep < totalTimeSteps; timeStep++) {
 			for (Agent agent : agents) {
-				agent.move(currentTimeStep);
 				if(agent.testCurrentField()) {
-					map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), currentTimeStep);
+					map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), timeStep);
 				}
-				MapHandler.writeMapToFile(map, currentTimeStep);
+				agent.move(timeStep);
+				MapHandler.writeMapToFile(map, timeStep, agents);
 			}
+			currentTimeStep++;
+			gui.setCurrentTimeStep(currentTimeStep);
+			gui.updateProgressBar(currentTimeStep);
+			gui.setCurrentMap(MapHandler.convertMapToImage(map, agents));
 		}
-		
-		agents = new ArrayList<Agent>();
 	}
-
+	
+	public void doOneTimeStep() {
+		if(currentTimeStep == totalTimeSteps)
+			return;
+		
+		for (Agent agent : agents) {
+			if(agent.testCurrentField()) {
+				map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), currentTimeStep);
+			}
+			agent.move(currentTimeStep);
+			MapHandler.writeMapToFile(map, currentTimeStep, agents);
+		}
+		currentTimeStep++;
+		gui.setCurrentTimeStep(currentTimeStep);
+		gui.updateProgressBar(currentTimeStep);
+		gui.setCurrentMap(MapHandler.convertMapToImage(map, agents));
+	}
+	
+	public void addNewAgent() {
+		if(map == null)
+			return;
+					
+		agents.add(new HutAgent(map.getStartPos(), map));
+		gui.setAmountOfAgentsLbl(agents.size());
+	}
+	
 	public void loadRuleOnPath(String pathToFile) {
 		try {
 			RuleHandler.loadRulesFromFile(pathToFile);
@@ -44,9 +80,17 @@ public class Controller {
 	public void loadMapOnPath(String pathToFile) {
 		try {
 			map = MapHandler.loadMap(pathToFile);
+			gui.setInitialMap(MapHandler.convertMapToImage(map, agents));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+	}
+	
+	public int getTotalTimeStep() {
+		return totalTimeSteps;
 	}
 }

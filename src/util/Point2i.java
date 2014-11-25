@@ -85,6 +85,10 @@ public class Point2i {
 		return new Point2i(oldX, oldY);
 		
 	}
+	
+	public Point2i invert(){
+		return new Point2i(-x, -y);
+	}
 
 	public static Point2i Zero() {
 		return new Point2i(0,0);

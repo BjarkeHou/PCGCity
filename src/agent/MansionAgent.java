@@ -18,10 +18,4 @@ public class MansionAgent extends Agent {
 		return false;
 	}
 
-	@Override
-	public Point2i move(int timestep) {
-		// TODO Auto-generated method stub
-		return new Point2i(0,0);
-	}
-
 }
