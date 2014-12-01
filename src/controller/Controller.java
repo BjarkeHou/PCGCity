@@ -22,24 +22,14 @@ public class Controller {
 	
 	public Controller() {
 		agents = new ArrayList<Agent>();
-		
+
 		gui = new AppWindow(this);
 		gui.frame.setVisible(true);
 	}
 	
 	public void doRestOfTimeSteps() {
 		for (int timeStep = currentTimeStep; timeStep < totalTimeSteps; timeStep++) {
-			for (Agent agent : agents) {
-				if(agent.testCurrentField()) {
-					map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), timeStep);
-				}
-				agent.move(timeStep);
-				MapHandler.writeMapToFile(map, timeStep, agents);
-			}
-			currentTimeStep++;
-			gui.setCurrentTimeStep(currentTimeStep);
-			gui.updateProgressBar(currentTimeStep);
-			gui.setCurrentMap(MapHandler.convertMapToImage(map, agents));
+			timeStep(timeStep);
 		}
 	}
 	
@@ -47,13 +37,34 @@ public class Controller {
 		if(currentTimeStep == totalTimeSteps)
 			return;
 		
+		timeStep(currentTimeStep);
+	}
+
+	private void timeStep(int timestep) {
+		ArrayList<Agent> agentsToRemove = new ArrayList<Agent>();
 		for (Agent agent : agents) {
+			//Building
 			if(agent.testCurrentField()) {
-				map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), currentTimeStep);
+				map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), timestep);
 			}
+			//Moving
 			agent.move(currentTimeStep);
-			MapHandler.writeMapToFile(map, currentTimeStep, agents);
+			//Retirement
+			if(agent.RetirementAge(timestep)) agentsToRemove.add(agent);
 		}
+		//Retire old agents
+		for(Agent a : agentsToRemove) agents.remove(a);
+		//Birth new agents
+		//TODO
+		//Go through each building on the map
+		
+		//For each building, roll to see if a new agent is birthed
+		//If it is, create it and add it to the agents list
+		//For start position, determine if a new agent type can be spawned
+		//If it can, spawn one
+		
+		//Update map
+		MapHandler.writeMapToFile(map, currentTimeStep, agents);
 		currentTimeStep++;
 		gui.setCurrentTimeStep(currentTimeStep);
 		gui.updateProgressBar(currentTimeStep);
@@ -64,7 +75,7 @@ public class Controller {
 		if(map == null)
 			return;
 					
-		agents.add(new HutAgent(map.getStartPos(), map));
+		agents.add(new HutAgent(map.getStartPos(), map, currentTimeStep,20));
 		gui.setAmountOfAgentsLbl(agents.size());
 	}
 	
