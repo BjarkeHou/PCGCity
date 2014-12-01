@@ -18,6 +18,8 @@ public abstract class Agent {
 	protected Point2i moveModifiers;
 	private Map map;
 	
+	protected int inefficiencyCounter = 0;
+	
 	public Agent(Point2i startPos, BUILDINGTYPE type, Map m) {
 		this.startPos = startPos;
 		this.currentPos = startPos;
@@ -84,6 +86,10 @@ public abstract class Agent {
 			totalCondition = totalCondition & ruleCondition;
 		}
 		
+		if(totalCondition)
+			inefficiencyCounter = 0;
+		else
+			inefficiencyCounter++;
 		return totalCondition;
 	}
 
@@ -100,7 +106,6 @@ public abstract class Agent {
 			y = Rand.GetInt(3)-1;
 		}
 		return (new Point2i(x, y)).magnitude(magnitude);
-		
 	}
 	
 	protected Point2i dirToField(Point2i field){
@@ -140,5 +145,9 @@ public abstract class Agent {
 			if(counter>=req.value) return true;
 		}
 		return false;
+	}
+	
+	public int getInefficiencyCounter() {
+		return inefficiencyCounter;
 	}
 }

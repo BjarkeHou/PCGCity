@@ -5,9 +5,11 @@ import gui.AppWindow;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import model.BUILDINGTYPE;
 import model.Map;
 import util.MapHandler;
 import util.Point2i;
+import util.Rand;
 import util.RuleHandler;
 import agent.Agent;
 import agent.HutAgent;
@@ -15,31 +17,33 @@ import agent.HutAgent;
 public class Controller {
 	private ArrayList<Agent> agents;
 	private Map map;
+	private ArrayList<Point2i> buildingList;
 	private AppWindow gui;
 	
 	private int totalTimeSteps = 200;
 	private int currentTimeStep = 0;
 	
+	private int happyTimeChance = 0;
+	private int happyTimeRate = 10;
+	private int deathRate = 10;
+	
 	public Controller() {
 		agents = new ArrayList<Agent>();
+		buildingList = new ArrayList<Point2i>();
 		
 		gui = new AppWindow(this);
 		gui.frame.setVisible(true);
 	}
 	
 	public void doRestOfTimeSteps() {
-		for (int timeStep = currentTimeStep; timeStep < totalTimeSteps; timeStep++) {
-			for (Agent agent : agents) {
-				if(agent.testCurrentField()) {
-					map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), timeStep);
-				}
-				agent.move(timeStep);
-				MapHandler.writeMapToFile(map, timeStep, agents);
+		while(currentTimeStep < totalTimeSteps) {
+			performTimeStep();
+			
+			if(currentTimeStep%happyTimeRate == 0){
+				performHappyTime();
 			}
+		
 			currentTimeStep++;
-			gui.setCurrentTimeStep(currentTimeStep);
-			gui.updateProgressBar(currentTimeStep);
-			gui.setCurrentMap(MapHandler.convertMapToImage(map, agents));
 		}
 	}
 	
@@ -47,11 +51,25 @@ public class Controller {
 		if(currentTimeStep == totalTimeSteps)
 			return;
 		
+		performTimeStep();
+		
+		if(currentTimeStep%happyTimeRate == 0){
+			performHappyTime();
+		}
+	}
+
+	private void performTimeStep() {
 		for (Agent agent : agents) {
 			if(agent.testCurrentField()) {
 				map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), currentTimeStep);
+				if(!buildingList.contains(agent.getPos()))
+					buildingList.add(agent.getPos());
 			}
 			agent.move(currentTimeStep);
+			
+			if(agent.getInefficiencyCounter() > deathRate)
+				removeAgent(agent);
+			
 			MapHandler.writeMapToFile(map, currentTimeStep, agents);
 		}
 		currentTimeStep++;
@@ -60,11 +78,42 @@ public class Controller {
 		gui.setCurrentMap(MapHandler.convertMapToImage(map, agents));
 	}
 	
+	private void performHappyTime() {
+		for (Point2i point : buildingList) {
+			// For each building on the map, test if theyve had happy time.
+			if(Rand.GetInt(100) <= happyTimeChance) {
+				addNewAgent(point, map.getField(point).buildingType);
+			}
+		}
+	}
+	
 	public void addNewAgent() {
 		if(map == null)
 			return;
 					
 		agents.add(new HutAgent(map.getStartPos(), map));
+		gui.setAmountOfAgentsLbl(agents.size());
+	}
+	
+	public void addNewAgent(Point2i pos, BUILDINGTYPE type) {
+		if(map == null)
+			return;
+		
+		switch (type) {
+		case HUT:
+			agents.add(new HutAgent(pos, map));
+			break;
+		case MANSION:
+			break;
+		default:
+			break;
+		}
+		
+		gui.setAmountOfAgentsLbl(agents.size());
+	}
+	
+	public void removeAgent(Agent agent) {
+		agents.remove(agent);
 		gui.setAmountOfAgentsLbl(agents.size());
 	}
 	
