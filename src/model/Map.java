@@ -16,7 +16,7 @@ public class Map {
 		
 	}
 	
-	public Map(int mapWidth, int mapHeight, TERRAINTYPE[][] terrain, Point2i startPos) {
+	public Map(int mapWidth, int mapHeight, TERRAIN[][] terrain, Point2i startPos) {
 		width = mapWidth;
 		height = mapHeight;
 		this.startPos = startPos;
@@ -26,10 +26,10 @@ public class Map {
 		
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				Field tempField = new Field(terrain[x][y], BUILDINGTYPE.NONE);
+				Field tempField = new Field(terrain[x][y], BUILDING.NONE);
 				
 				if(x==startPos.x() && y==startPos.y())
-					tempField.buildingType = BUILDINGTYPE.STARTPOSITION;
+					tempField.building = BUILDING.STARTPOSITION;
 				
 				map[x][y] = tempField;				
 			}
@@ -42,7 +42,7 @@ public class Map {
 		else return null;
 	}
 	
-	public BUILDINGTYPE getBuildingTypeForTimestep(Point2i point, int timestep) {
+	public BUILDING getBuildingForTimestep(Point2i point, int timestep) {
 		for (int i = timestep; i >= 0 ; i--) {
 			for (Change change : changes.get(i)) {
 				if(change.getPoint().x() == point.x() && change.getPoint().y() == point.y()) {
@@ -50,11 +50,11 @@ public class Map {
 				}
 			}
 		}
-		return BUILDINGTYPE.NONE;
+		return BUILDING.NONE;
 	}
 	
-	public void changeBuildingTypeOnField(Point2i point, BUILDINGTYPE newType, int timestep) {
-		map[point.x()][point.y()].buildingType = newType;
+	public void changeBuildingOnField(Point2i point, BUILDING newType, int timestep) {
+		map[point.x()][point.y()].building = newType;
 		addChange(new Change(point, newType, timestep));
 	}
 	

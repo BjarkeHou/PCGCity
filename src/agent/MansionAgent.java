@@ -1,7 +1,6 @@
 package agent;
 
-import model.BUILDINGTYPE;
-import model.Map;
+import model.*;
 import util.Point2i;
 
 /*public class MansionAgent extends Agent {

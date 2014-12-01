@@ -5,8 +5,7 @@ import gui.AppWindow;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import model.BUILDINGTYPE;
-import model.Map;
+import model.*;
 import util.MapHandler;
 import util.Point2i;
 import util.Rand;
@@ -58,7 +57,7 @@ public class Controller {
 		for (Agent agent : agents) {
 			//Building
 			if(agent.testCurrentField()) {
-				map.changeBuildingTypeOnField(agent.getPos(), agent.getBuilderType(), timestep);
+				map.changeBuildingOnField(agent.getPos(), agent.getBuilder(), timestep);
 				if(!buildingList.contains(agent.getPos()))
 					buildingList.add(agent.getPos());
 			}
@@ -83,7 +82,7 @@ public class Controller {
 		for (Point2i point : buildingList) {
 			// For each building on the map, test if theyve had happy time.
 			if(Rand.GetInt(100) <= happyTimeChance) {
-				addNewAgent(point, map.getField(point).buildingType);
+				addNewAgent(point, map.getField(point).building);
 			}
 		}
 	}
@@ -96,7 +95,7 @@ public class Controller {
 		gui.setAmountOfAgentsLbl(agents.size());
 	}
 	
-	public void addNewAgent(Point2i pos, BUILDINGTYPE type) {
+	public void addNewAgent(Point2i pos, BUILDING type) {
 		if(map == null)
 			return;
 		

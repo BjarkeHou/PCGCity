@@ -4,16 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import agent.rule.*;
-import model.BUILDINGTYPE;
-import model.Field;
-import model.Map;
+import model.*;
 import util.Point2i;
 import util.Rand;
 
 public abstract class Agent {
 	protected Point2i startPos;
 	protected Point2i currentPos;
-	protected BUILDINGTYPE builder; 
+	protected BUILDING build; 
 	protected ArrayList<Rule> ruleList;
 	protected Point2i moveModifiers;
 	private Map map;
@@ -21,10 +19,10 @@ public abstract class Agent {
 	
 	protected int inefficiencyCounter = 0;
 	
-	public Agent(Point2i startPos, BUILDINGTYPE type, Map m){
+	public Agent(Point2i startPos, BUILDING type, Map m){
 		this.startPos = startPos;
 		this.currentPos = startPos;
-		builder = type;
+		build = type;
 		ruleList = new ArrayList<Rule>();
 		map = m;
 	}
@@ -37,8 +35,8 @@ public abstract class Agent {
 		return currentPos;
 	}
 	
-	public BUILDINGTYPE getBuilderType() {
-		return builder;
+	public BUILDING getBuilder() {
+		return build;
 	}
 	
 	public boolean testCurrentField() {
@@ -114,11 +112,11 @@ public abstract class Agent {
 			for(int j = (currentPos.y()-radius > 0 ? currentPos.y()-radius : 0); 
 			j < (currentPos.y()+1+radius < m.getHeight() ? currentPos.y()+1+radius : m.getHeight()); j++){
 				Field f = m.getField(new Point2i(i,j));
-				if(req instanceof BuildingTypeRequirement){
-					if(f.buildingType == ((BuildingTypeRequirement) req).getType()) counter++;
+				if(req instanceof BuildingRequirement){
+					if(f.building == ((BuildingRequirement) req).getBuilding()) counter++;
 				}
-				if(req instanceof TerrainTypeRequirement){
-					if(f.terrainType == ((TerrainTypeRequirement) req).getType()) counter++;
+				if(req instanceof TerrainRequirement){
+					if(f.terrain == ((TerrainRequirement) req).getTerrain()) counter++;
 				}
 			}
 		}

@@ -3,8 +3,6 @@ package agent.rule;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import model.BUILDINGTYPE;
-
 
 
 public class Rule {

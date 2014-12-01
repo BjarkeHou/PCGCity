@@ -4,14 +4,14 @@ import util.Point2i;
 
 public class Change {
 	Point2i point;
-	private BUILDINGTYPE presentType;
+	private BUILDING presentType;
 	private int timeStep;
 	
 	public Point2i getPoint() {
 		return point;
 	}
 	
-	public BUILDINGTYPE getPresentType() {
+	public BUILDING getPresentType() {
 		return presentType;
 	}
 	
@@ -20,7 +20,7 @@ public class Change {
 	}
 	
 	public Change(Point2i point,
-			BUILDINGTYPE presentType, int timeStep) {
+			BUILDING presentType, int timeStep) {
 		super();
 		this.point = point;
 		this.presentType = presentType;

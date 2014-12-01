@@ -1,5 +1,5 @@
 package model;
 
-public enum BUILDINGTYPE {
+public enum BUILDING {
 	NONE, STARTPOSITION, HUT, MANSION
 }

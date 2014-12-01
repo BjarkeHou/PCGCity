@@ -1,11 +1,11 @@
 package model;
 
 public class Field {
-	public TERRAINTYPE terrainType;
-	public BUILDINGTYPE buildingType;
+	public TERRAIN terrain;
+	public BUILDING building;
 	
-	public Field(TERRAINTYPE terrain, BUILDINGTYPE building) {
-		this.terrainType = terrain;
-		this.buildingType = building;
+	public Field(TERRAIN terrain, BUILDING building) {
+		this.terrain = terrain;
+		this.building = building;
 	}
 }

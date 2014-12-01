@@ -1,34 +1,32 @@
 package agent;
 
 import agent.rule.*;
-import model.BUILDINGTYPE;
-import model.Map;
-import model.TERRAINTYPE;
+import model.*;
 import util.Point2i;
 
 public class HutAgent extends Agent {
 
 	
 	public HutAgent(Point2i startPos, Map map) {
-		super(startPos, BUILDINGTYPE.HUT, map);
+		super(startPos, BUILDING.HUT, map);
 		
 		birth = new AgentBirth(0.05);
-		birth.addBirthLocation(BUILDINGTYPE.HUT);
-		birth.addBirthLocation(BUILDINGTYPE.STARTPOSITION);
+		birth.addBirthLocation(BUILDING.HUT);
+		birth.addBirthLocation(BUILDING.STARTPOSITION);
 		
 		//Nothing must be built on the square I am standing on
 		Rule r1 = new Rule(0, CONSTRAINT.ALL);
-		r1.addRequirement(new BuildingTypeRequirement(1, false, BUILDINGTYPE.NONE));
-		r1.addRequirement(new TerrainTypeRequirement(1, false, TERRAINTYPE.FIELD));
+		r1.addRequirement(new BuildingRequirement(1, false, BUILDING.NONE));
+		r1.addRequirement(new TerrainRequirement(1, false, TERRAIN.FIELD));
 
 		//I must be next to the town
 		Rule r2 = new Rule(1, CONSTRAINT.ANY);
-		r2.addRequirement(new BuildingTypeRequirement(1, false, BUILDINGTYPE.STARTPOSITION));
-		r2.addRequirement(new BuildingTypeRequirement(1, false, BUILDINGTYPE.HUT));
+		r2.addRequirement(new BuildingRequirement(1, false, BUILDING.STARTPOSITION));
+		r2.addRequirement(new BuildingRequirement(1, false, BUILDING.HUT));
 		
 		//It must not be too tight to built here
 		Rule r3 = new Rule(1, CONSTRAINT.ALL);
-		r3.addRequirement(new BuildingTypeRequirement(3, true, BUILDINGTYPE.HUT));
+		r3.addRequirement(new BuildingRequirement(3, true, BUILDING.HUT));
 
 		ruleList.add(r1);
 		ruleList.add(r2);
