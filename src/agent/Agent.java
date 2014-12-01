@@ -21,7 +21,8 @@ public abstract class Agent {
 	private int retirementAge;
 	protected AgentBirth birth;
 	
-	public Agent(Point2i startPos, BUILDINGTYPE type, Map m, int timestep, int retirement) {
+	protected int inefficiencyCounter = 0;
+	
 		this.startPos = startPos;
 		this.currentPos = startPos;
 		builder = type;
@@ -86,6 +87,10 @@ public abstract class Agent {
 			return true;
 		}
 		return false;
+		if(totalCondition)
+			inefficiencyCounter = 0;
+		else
+			inefficiencyCounter++;
 	}
 	/*public void move(int timestep){
 		int mag = (timestep/100)+1;
@@ -100,7 +105,6 @@ public abstract class Agent {
 			y = Rand.GetInt(3)-1;
 		}
 		return (new Point2i(x, y)).magnitude(magnitude);
-		
 	}
 	
 	protected Point2i dirToField(Point2i field){
@@ -140,5 +144,9 @@ public abstract class Agent {
 			if(counter>=req.value) return true;
 		}
 		return false;
+	}
+	
+	public int getInefficiencyCounter() {
+		return inefficiencyCounter;
 	}
 }
