@@ -1,11 +1,6 @@
 package agent;
 
-import agent.rule.BuildingMoveInstruction;
-import agent.rule.BuildingTypeRequirement;
-import agent.rule.CONSTRAINT;
-import agent.rule.MOVEDIR;
-import agent.rule.Rule;
-import agent.rule.TerrainTypeRequirement;
+import agent.rule.*;
 import model.BUILDINGTYPE;
 import model.Map;
 import model.TERRAINTYPE;
@@ -13,23 +8,26 @@ import util.Point2i;
 
 public class HutAgent extends Agent {
 
-	public HutAgent(Point2i startPos, Map map) {
-		super(startPos, BUILDINGTYPE.HUT, map);
+	
+	public HutAgent(Point2i startPos, Map map, int timestep, int lifetime) {
+		super(startPos, BUILDINGTYPE.HUT, map, timestep, lifetime);
+		
+		birth = new AgentBirth(0.05);
+		birth.addBirthLocation(BUILDINGTYPE.HUT);
+		birth.addBirthLocation(BUILDINGTYPE.STARTPOSITION);
 		
 		//Nothing must be built on the square I am standing on
-		Rule r1 = new Rule(0, CONSTRAINT.ALL, null);
+		Rule r1 = new Rule(0, CONSTRAINT.ALL);
 		r1.addRequirement(new BuildingTypeRequirement(1, false, BUILDINGTYPE.NONE));
 		r1.addRequirement(new TerrainTypeRequirement(1, false, TERRAINTYPE.FIELD));
 
 		//I must be next to the town
-		BuildingMoveInstruction m2 = new BuildingMoveInstruction(MOVEDIR.TO,1,BUILDINGTYPE.STARTPOSITION);
-		Rule r2 = new Rule(1, CONSTRAINT.ANY, m2);
+		Rule r2 = new Rule(1, CONSTRAINT.ANY);
 		r2.addRequirement(new BuildingTypeRequirement(1, false, BUILDINGTYPE.STARTPOSITION));
 		r2.addRequirement(new BuildingTypeRequirement(1, false, BUILDINGTYPE.HUT));
 		
 		//It must not be too tight to built here
-		BuildingMoveInstruction m3 = new BuildingMoveInstruction(MOVEDIR.AWAY,2,BUILDINGTYPE.STARTPOSITION);
-		Rule r3 = new Rule(1, CONSTRAINT.ALL, m3);
+		Rule r3 = new Rule(1, CONSTRAINT.ALL);
 		r3.addRequirement(new BuildingTypeRequirement(3, true, BUILDINGTYPE.HUT));
 
 		ruleList.add(r1);
@@ -43,19 +41,6 @@ public class HutAgent extends Agent {
 //		}
 	}
 
-	/*@Override
-	public Point2i move(int timestep) {
-		Point2i move = currentPos;
-		Point2i newMove = move.add(baseMove());
-		double maxRadius = Math.sqrt(timestep)/2.0;
-		double dist = distToStart();
-		if(dist > maxRadius) {
-			Point2i dirToS = dirToStart();
-			newMove = newMove.add(dirToS);
-		}
-		newMove = limitMove(newMove);
-		this.currentPos = newMove;
-		return newMove;
-	}*/
+	
 
 }

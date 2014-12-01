@@ -17,13 +17,18 @@ public abstract class Agent {
 	protected ArrayList<Rule> ruleList;
 	protected Point2i moveModifiers;
 	private Map map;
+	private int birthTimestep;
+	private int retirementAge;
+	protected AgentBirth birth;
 	
-	public Agent(Point2i startPos, BUILDINGTYPE type, Map m) {
+	public Agent(Point2i startPos, BUILDINGTYPE type, Map m, int timestep, int retirement) {
 		this.startPos = startPos;
 		this.currentPos = startPos;
 		builder = type;
 		ruleList = new ArrayList<Rule>();
 		map = m;
+		birthTimestep = timestep;
+		retirementAge = retirement;
 	}
 	
 	public void addRule(Rule r){
@@ -56,41 +61,36 @@ public abstract class Agent {
 				
 			}
 			
-			//check movement
-			if(!ruleCondition){
-
-				Point2i dir = Point2i.Zero();
-				MoveInstruction mi = rule.GetMovement();
-				if(mi.GetMagnitude() > 0){
-					if(mi instanceof BuildingMoveInstruction){
-						BuildingMoveInstruction bmi = (BuildingMoveInstruction) mi;
-						switch (bmi.GetType()){
-							case STARTPOSITION:
-								
-								dir = (mi.GetMoveDir() == MOVEDIR.TO ? dirToField(startPos) : dirToField(startPos).invert());
-								break;
-							//more types
-							default:
-								break;
-						}
-					}
-					/*if(req instanceof TerrainMoveInstruction){
-					if(f.terrainType == ((TerrainTypeRequirement) req).getType()) counter++;
-					}*/
-				}	
-				moveModifiers = moveModifiers.add(dir.magnitude(mi.GetMagnitude()));
-			}
-			
 			totalCondition = totalCondition & ruleCondition;
 		}
 		
 		return totalCondition;
 	}
-
-	public void move(int timestep){
+	
+	public Point2i move(int timestep) {
+		Point2i move = currentPos;
+		Point2i newMove = move.add(baseMove(1));
+		double maxRadius = Math.sqrt(timestep)/2.0;
+		double dist = distToField(startPos);
+		if(dist > maxRadius) {
+			Point2i dirToS = dirToField(startPos);
+			newMove = newMove.add(dirToS);
+		}
+		newMove = limitMove(newMove);
+		this.currentPos = newMove;
+		return newMove;
+	}
+	
+	public boolean RetirementAge(int currentTimestep){
+		if((currentTimestep - birthTimestep) > retirementAge){
+			return true;
+		}
+		return false;
+	}
+	/*public void move(int timestep){
 		int mag = (timestep/100)+1;
 		currentPos = limitMove(currentPos.add(moveModifiers).add(baseMove(mag)));
-	}
+	}*/
 	
 	protected Point2i baseMove(int magnitude){
 		int x = 0;

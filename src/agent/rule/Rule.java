@@ -10,15 +10,15 @@ import model.BUILDINGTYPE;
 public class Rule {
 	
 	ArrayList<Requirement> requirements;
-	MoveInstruction movement;
+	//MoveInstruction movement;
 	private int radius = 0;
 	private CONSTRAINT constraint;
 	
-	public Rule(int radius, CONSTRAINT constraint, MoveInstruction instruct) {
+	public Rule(int radius, CONSTRAINT constraint) {
 		this.radius = radius;
 		this.constraint = constraint;
-		if(instruct != null) this.movement = instruct;
-		else movement = new BuildingMoveInstruction(MOVEDIR.TO, 0, BUILDINGTYPE.STARTPOSITION);
+		//if(instruct != null) this.movement = instruct;
+		//else movement = new BuildingMoveInstruction(MOVEDIR.TO, 0, BUILDINGTYPE.STARTPOSITION);
 		
 		requirements = new ArrayList<Requirement>();
 	}
@@ -39,7 +39,7 @@ public class Rule {
 		return constraint;
 	}
 	
-	public MoveInstruction GetMovement(){
+	/*public MoveInstruction GetMovement(){
 		return movement;
-	}
+	}*/
 }

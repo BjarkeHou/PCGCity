@@ -13,7 +13,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import agent.rule.BuildingTypeRequirement;
-import agent.rule.MoveInstruction;
 import agent.rule.TerrainTypeRequirement;
 import agent.rule.CONSTRAINT;
 import agent.rule.Rule;
@@ -38,8 +37,7 @@ public class RuleHandler {
 				String constraint = (String)jRule.get("CONSTRAINT");
 				boolean isAll = constraint.equals("ALL");
 				long radius = (long)jRule.get("RADIUS");
-				MoveInstruction moveInstruction = CreateMoveInstruction(jRule.get("MOVE"));
-				Rule newRule = new Rule((int)radius, isAll ? CONSTRAINT.ALL : CONSTRAINT.ANY, moveInstruction);
+				Rule newRule = new Rule((int)radius, isAll ? CONSTRAINT.ALL : CONSTRAINT.ANY);
 				
 				JSONArray jRequirements = (JSONArray) jRule.get("REQUIREMENTS");
 				
@@ -72,11 +70,6 @@ public class RuleHandler {
 		}
 		
 		return returnArray;
-	}
-	
-	private static MoveInstruction CreateMoveInstruction(Object object) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	private static BUILDINGTYPE getBuildingType(String val) {
