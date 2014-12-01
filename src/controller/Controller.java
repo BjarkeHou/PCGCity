@@ -23,7 +23,7 @@ public class Controller {
 	private int totalTimeSteps = 200;
 	private int currentTimeStep = 0;
 	
-	private int happyTimeChance = 0;
+	private int happyTimeChance = 10;
 	private int happyTimeRate = 10;
 	private int deathRate = 10;
 	
@@ -37,11 +37,7 @@ public class Controller {
 	
 	public void doRestOfTimeSteps() {
 		while(currentTimeStep < totalTimeSteps) {
-			performTimeStep();
-			
-			if(currentTimeStep%happyTimeRate == 0){
-				performHappyTime();
-		
+			doOneTimeStep();
 		}
 	}
 	
@@ -49,19 +45,16 @@ public class Controller {
 		if(currentTimeStep == totalTimeSteps)
 			return;
 		
-		performTimeStep();
+		timeStep(currentTimeStep);
 		
 		if(currentTimeStep%happyTimeRate == 0){
 			performHappyTime();
 		}
-		timeStep(currentTimeStep);
 	}
 
 	private void timeStep(int timestep) {
 		ArrayList<Agent> agentsToRemove = new ArrayList<Agent>();
-	}
-
-	private void performTimeStep() {
+		
 		for (Agent agent : agents) {
 			//Building
 			if(agent.testCurrentField()) {
@@ -72,22 +65,11 @@ public class Controller {
 			//Moving
 			agent.move(currentTimeStep);
 			//Retirement
-			if(agent.RetirementAge(timestep)) agentsToRemove.add(agent);
-			
-			if(agent.getInefficiencyCounter() > deathRate)
-				removeAgent(agent);
+			if(agent.getInefficiencyCounter() > deathRate) agentsToRemove.add(agent);
 			
 		}
 		//Retire old agents
 		for(Agent a : agentsToRemove) agents.remove(a);
-		//Birth new agents
-		//TODO
-		//Go through each building on the map
-		
-		//For each building, roll to see if a new agent is birthed
-		//If it is, create it and add it to the agents list
-		//For start position, determine if a new agent type can be spawned
-		//If it can, spawn one
 		
 		//Update map
 		MapHandler.writeMapToFile(map, currentTimeStep, agents);
@@ -110,7 +92,7 @@ public class Controller {
 		if(map == null)
 			return;
 					
-		agents.add(new HutAgent(map.getStartPos(), map, currentTimeStep,20));
+		agents.add(new HutAgent(map.getStartPos(), map));
 		gui.setAmountOfAgentsLbl(agents.size());
 	}
 	

@@ -7,9 +7,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
+//import com.jgoodies.forms.layout.FormLayout;
+//import com.jgoodies.forms.layout.ColumnSpec;
+//import com.jgoodies.forms.layout.RowSpec;
 
 public class SettingsDialog extends JFrame {
 
@@ -18,7 +18,7 @@ public class SettingsDialog extends JFrame {
 	/**
 	 * Create the dialog.
 	 */
-	public SettingsDialog() {
+	/*public SettingsDialog() {
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -41,6 +41,6 @@ public class SettingsDialog extends JFrame {
 				buttonPane.add(cancelButton);
 			}
 		}
-	}
+	}*/
 
 }

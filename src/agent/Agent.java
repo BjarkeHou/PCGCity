@@ -17,19 +17,16 @@ public abstract class Agent {
 	protected ArrayList<Rule> ruleList;
 	protected Point2i moveModifiers;
 	private Map map;
-	private int birthTimestep;
-	private int retirementAge;
 	protected AgentBirth birth;
 	
 	protected int inefficiencyCounter = 0;
 	
+	public Agent(Point2i startPos, BUILDINGTYPE type, Map m){
 		this.startPos = startPos;
 		this.currentPos = startPos;
 		builder = type;
 		ruleList = new ArrayList<Rule>();
 		map = m;
-		birthTimestep = timestep;
-		retirementAge = retirement;
 	}
 	
 	public void addRule(Rule r){
@@ -59,10 +56,13 @@ public abstract class Agent {
 				ruleCondition = (rule.getConstraint() == CONSTRAINT.ALL ? 
 						ruleCondition & conditionFullfilled : 
 						ruleCondition | conditionFullfilled);
-				
 			}
 			
 			totalCondition = totalCondition & ruleCondition;
+			
+			//Test for inefficient
+			if(totalCondition) inefficiencyCounter = 0;
+			else inefficiencyCounter++;
 		}
 		
 		return totalCondition;
@@ -81,21 +81,6 @@ public abstract class Agent {
 		this.currentPos = newMove;
 		return newMove;
 	}
-	
-	public boolean RetirementAge(int currentTimestep){
-		if((currentTimestep - birthTimestep) > retirementAge){
-			return true;
-		}
-		return false;
-		if(totalCondition)
-			inefficiencyCounter = 0;
-		else
-			inefficiencyCounter++;
-	}
-	/*public void move(int timestep){
-		int mag = (timestep/100)+1;
-		currentPos = limitMove(currentPos.add(moveModifiers).add(baseMove(mag)));
-	}*/
 	
 	protected Point2i baseMove(int magnitude){
 		int x = 0;

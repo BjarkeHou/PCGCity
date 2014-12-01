@@ -9,8 +9,8 @@ import util.Point2i;
 public class HutAgent extends Agent {
 
 	
-	public HutAgent(Point2i startPos, Map map, int timestep, int lifetime) {
-		super(startPos, BUILDINGTYPE.HUT, map, timestep, lifetime);
+	public HutAgent(Point2i startPos, Map map) {
+		super(startPos, BUILDINGTYPE.HUT, map);
 		
 		birth = new AgentBirth(0.05);
 		birth.addBirthLocation(BUILDINGTYPE.HUT);

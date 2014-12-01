@@ -63,8 +63,8 @@ public class MapHandler {
 		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		img = translateMap(map, img, agents);
 		
-		File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
-		//File file = new File("C:\\Users\\Oragada\\Desktop\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
+		//File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
+		File file = new File("C:\\Users\\Oragada\\Desktop\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
 		try {
 			ImageIO.write(img, "png", file);
 		} catch (IOException e) {
