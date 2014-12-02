@@ -23,12 +23,12 @@ public class Controller {
 	private ArrayList<Point2i> buildingList;
 	private AppWindow gui;
 	
-	private int totalTimeSteps = 200;
+	private int totalTimeSteps = 300;
 	private int currentTimeStep = 0;
 	
-	private int happyTimeChance = 10;
+	//private int happyTimeChance = 10;
 	private int happyTimeRate = 10;
-	private int deathRate = 10;
+	private int deathRate = 5;
 	
 	public Controller() {
 		agents = new ArrayList<Agent>();
@@ -47,8 +47,7 @@ public class Controller {
 	}
 	
 	public void doOneTimeStep() {
-		if(currentTimeStep == totalTimeSteps)
-			return;
+		
 		
 		timeStep(currentTimeStep);
 		
@@ -139,8 +138,8 @@ public class Controller {
 	
 	private void CreateBirthParameters() {
 		birthParameters = new HashMap<BUILDING, AgentBirth>();
-		birthParameters.put(BUILDING.HUT, new AgentBirth(0.10));
-		AgentBirth ab1 = new AgentBirth(0.10);
+		birthParameters.put(BUILDING.HUT, new AgentBirth(0.15));
+		AgentBirth ab1 = new AgentBirth(0.02);
 		ab1.addRestriction(BUILDING.HUT, 20);
 		birthParameters.put(BUILDING.HOUSE, ab1);
 		
