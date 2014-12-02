@@ -18,6 +18,8 @@ import model.TERRAIN;
 import agent.*;
 
 public class MapHandler {
+	
+	public static boolean showAgents = false;
 
 	public static Map loadMap(String pathToFile) throws Exception {
 		File file = new File(pathToFile);
@@ -92,11 +94,14 @@ public class MapHandler {
 					//pixels[y*map.getWidth() + x] = getColorForTerrainType(map.getField(point).terrainType);
 					outMap.setRGB(x, y, getColorForTerrain(field.terrain));
 				}
-				for(Agent a : agents){
-					if(a.getPos().equals(new Point2i(x,y))){
-						outMap.setRGB(x, y, new Color(100,100,100).getRGB());
+				if(showAgents){
+					for(Agent a : agents){
+						if(a.getPos().equals(new Point2i(x,y))){
+							outMap.setRGB(x, y, new Color(100,100,100).getRGB());
+						}
 					}
 				}
+				
 			}
 		}
 		return outMap;
