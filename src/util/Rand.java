@@ -8,4 +8,8 @@ public class Rand {
 		return rand.nextInt(i);
 	}
 	
+	public static double GetDouble(){
+		return rand.nextDouble();
+	}
+	
 }

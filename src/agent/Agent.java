@@ -4,24 +4,25 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import agent.rule.*;
-import model.BUILDINGTYPE;
-import model.Field;
-import model.Map;
+import model.*;
 import util.Point2i;
 import util.Rand;
 
 public abstract class Agent {
 	protected Point2i startPos;
 	protected Point2i currentPos;
-	protected BUILDINGTYPE builder; 
+	protected BUILDING build; 
 	protected ArrayList<Rule> ruleList;
 	protected Point2i moveModifiers;
 	private Map map;
+	protected AgentBirth birth;
 	
-	public Agent(Point2i startPos, BUILDINGTYPE type, Map m) {
+	protected int inefficiencyCounter = 0;
+	
+	public Agent(Point2i startPos, BUILDING type, Map m){
 		this.startPos = startPos;
 		this.currentPos = startPos;
-		builder = type;
+		build = type;
 		ruleList = new ArrayList<Rule>();
 		map = m;
 	}
@@ -34,8 +35,8 @@ public abstract class Agent {
 		return currentPos;
 	}
 	
-	public BUILDINGTYPE getBuilderType() {
-		return builder;
+	public BUILDING getBuilder() {
+		return build;
 	}
 	
 	public boolean testCurrentField() {
@@ -53,43 +54,30 @@ public abstract class Agent {
 				ruleCondition = (rule.getConstraint() == CONSTRAINT.ALL ? 
 						ruleCondition & conditionFullfilled : 
 						ruleCondition | conditionFullfilled);
-				
-			}
-			
-			//check movement
-			if(!ruleCondition){
-
-				Point2i dir = Point2i.Zero();
-				MoveInstruction mi = rule.GetMovement();
-				if(mi.GetMagnitude() > 0){
-					if(mi instanceof BuildingMoveInstruction){
-						BuildingMoveInstruction bmi = (BuildingMoveInstruction) mi;
-						switch (bmi.GetType()){
-							case STARTPOSITION:
-								
-								dir = (mi.GetMoveDir() == MOVEDIR.TO ? dirToField(startPos) : dirToField(startPos).invert());
-								break;
-							//more types
-							default:
-								break;
-						}
-					}
-					/*if(req instanceof TerrainMoveInstruction){
-					if(f.terrainType == ((TerrainTypeRequirement) req).getType()) counter++;
-					}*/
-				}	
-				moveModifiers = moveModifiers.add(dir.magnitude(mi.GetMagnitude()));
 			}
 			
 			totalCondition = totalCondition & ruleCondition;
+			
+			//Test for inefficient
+			if(totalCondition) inefficiencyCounter = 0;
+			else inefficiencyCounter++;
 		}
 		
 		return totalCondition;
 	}
-
-	public void move(int timestep){
-		int mag = (timestep/100)+1;
-		currentPos = limitMove(currentPos.add(moveModifiers).add(baseMove(mag)));
+	
+	public Point2i move(int timestep) {
+		Point2i move = currentPos;
+		Point2i newMove = move.add(baseMove(1));
+		double maxRadius = Math.sqrt(timestep)/2.0;
+		double dist = distToField(startPos);
+		if(dist > maxRadius) {
+			Point2i dirToS = dirToField(startPos);
+			newMove = newMove.add(dirToS);
+		}
+		newMove = limitMove(newMove);
+		this.currentPos = newMove;
+		return newMove;
 	}
 	
 	protected Point2i baseMove(int magnitude){
@@ -100,7 +88,6 @@ public abstract class Agent {
 			y = Rand.GetInt(3)-1;
 		}
 		return (new Point2i(x, y)).magnitude(magnitude);
-		
 	}
 	
 	protected Point2i dirToField(Point2i field){
@@ -125,11 +112,11 @@ public abstract class Agent {
 			for(int j = (currentPos.y()-radius > 0 ? currentPos.y()-radius : 0); 
 			j < (currentPos.y()+1+radius < m.getHeight() ? currentPos.y()+1+radius : m.getHeight()); j++){
 				Field f = m.getField(new Point2i(i,j));
-				if(req instanceof BuildingTypeRequirement){
-					if(f.buildingType == ((BuildingTypeRequirement) req).getType()) counter++;
+				if(req instanceof BuildingRequirement){
+					if(f.building == ((BuildingRequirement) req).getBuilding()) counter++;
 				}
-				if(req instanceof TerrainTypeRequirement){
-					if(f.terrainType == ((TerrainTypeRequirement) req).getType()) counter++;
+				if(req instanceof TerrainRequirement){
+					if(f.terrain == ((TerrainRequirement) req).getTerrain()) counter++;
 				}
 			}
 		}
@@ -140,5 +127,9 @@ public abstract class Agent {
 			if(counter>=req.value) return true;
 		}
 		return false;
+	}
+	
+	public int getInefficiencyCounter() {
+		return inefficiencyCounter;
 	}
 }

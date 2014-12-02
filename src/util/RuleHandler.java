@@ -4,17 +4,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import model.BUILDINGTYPE;
-import model.TERRAINTYPE;
+import model.*;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import agent.rule.BuildingTypeRequirement;
-import agent.rule.MoveInstruction;
-import agent.rule.TerrainTypeRequirement;
+import agent.rule.BuildingRequirement;
+import agent.rule.TerrainRequirement;
 import agent.rule.CONSTRAINT;
 import agent.rule.Rule;
 
@@ -38,8 +36,7 @@ public class RuleHandler {
 				String constraint = (String)jRule.get("CONSTRAINT");
 				boolean isAll = constraint.equals("ALL");
 				long radius = (long)jRule.get("RADIUS");
-				MoveInstruction moveInstruction = CreateMoveInstruction(jRule.get("MOVE"));
-				Rule newRule = new Rule((int)radius, isAll ? CONSTRAINT.ALL : CONSTRAINT.ANY, moveInstruction);
+				Rule newRule = new Rule((int)radius, isAll ? CONSTRAINT.ALL : CONSTRAINT.ANY);
 				
 				JSONArray jRequirements = (JSONArray) jRule.get("REQUIREMENTS");
 				
@@ -52,12 +49,12 @@ public class RuleHandler {
 					
 					switch (reqType) {
 					case "BUILDING":
-						BUILDINGTYPE buildingType = getBuildingType((String)jReq.get("TARGET"));
-						newRule.addRequirement(new BuildingTypeRequirement((int)value, isUpperLimit, buildingType));
+						BUILDING buildingType = getBuilding((String)jReq.get("TARGET"));
+						newRule.addRequirement(new BuildingRequirement((int)value, isUpperLimit, buildingType));
 						break;
 					case "TERRAIN":
-						TERRAINTYPE terrainType = getTerrainType((String)jReq.get("TARGET"));
-						newRule.addRequirement(new TerrainTypeRequirement((int)value, isUpperLimit, terrainType));
+						TERRAIN terrainType = getTerrain((String)jReq.get("TARGET"));
+						newRule.addRequirement(new TerrainRequirement((int)value, isUpperLimit, terrainType));
 						break;
 					default:
 						break;
@@ -73,51 +70,46 @@ public class RuleHandler {
 		
 		return returnArray;
 	}
-	
-	private static MoveInstruction CreateMoveInstruction(Object object) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	private static BUILDINGTYPE getBuildingType(String val) {
-		BUILDINGTYPE buildingType;
+	private static BUILDING getBuilding(String val) {
+		BUILDING building;
 		switch (val) {
 		case "STARTPOSITION":
-			buildingType = BUILDINGTYPE.STARTPOSITION;
+			building = BUILDING.STARTPOSITION;
 			break;
 		case "NONE":
-			buildingType = BUILDINGTYPE.NONE;
+			building = BUILDING.NONE;
 			break;
 		case "HUT":
-			buildingType = BUILDINGTYPE.HUT;
+			building = BUILDING.HUT;
 			break;
 		case "MANSION":
-			buildingType = BUILDINGTYPE.MANSION;
+			building = BUILDING.MANSION;
 			break;
 		default:
-			buildingType = BUILDINGTYPE.NONE;
+			building = BUILDING.NONE;
 			break;
 		} 
 		
-		return buildingType;
+		return building;
 	}
 	
-	private static TERRAINTYPE getTerrainType(String val) {
-		TERRAINTYPE terrainType;
+	private static TERRAIN getTerrain(String val) {
+		TERRAIN terrain;
 		switch (val) {
 		case "WATER":
-			terrainType = TERRAINTYPE.WATER;
+			terrain = TERRAIN.WATER;
 			break;
 		case "FIELD":
-			terrainType = TERRAINTYPE.FIELD;
+			terrain = TERRAIN.FIELD;
 			break;
 		case "ROCK":
-			terrainType = TERRAINTYPE.ROCK;
+			terrain = TERRAIN.ROCK;
 			break;
 		default:
-			terrainType = TERRAINTYPE.OUTERSPACE;
+			terrain = TERRAIN.OUTERSPACE;
 			break;
 		} 
-		return terrainType;
+		return terrain;
 	}
 }

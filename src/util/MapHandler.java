@@ -11,19 +11,21 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import agent.Agent;
-import model.BUILDINGTYPE;
+import model.BUILDING;
 import model.Field;
 import model.Map;
-import model.TERRAINTYPE;
+import model.TERRAIN;
+import agent.*;
 
 public class MapHandler {
+	
+	public static boolean showAgents = false;
 
 	public static Map loadMap(String pathToFile) throws Exception {
 		File file = new File(pathToFile);
 		BufferedImage image = ImageIO.read(file);
 
-		TERRAINTYPE[][] terrain = new TERRAINTYPE[image.getWidth()][image.getHeight()];
+		TERRAIN[][] terrain = new TERRAIN[image.getWidth()][image.getHeight()];
 		boolean foundAStartPositionBefore = false;
 		Point2i startPos = null;
 		
@@ -33,11 +35,11 @@ public class MapHandler {
 
 				// Color Red get cordinates
 				if (c.getRed() < 100 && c.getGreen() > 230 && c.getBlue() < 100) {
-					terrain[x][y] = TERRAINTYPE.FIELD;
+					terrain[x][y] = TERRAIN.FIELD;
 				} else if (c.getRed() < 100 && c.getGreen() < 100 && c.getBlue() > 230) {
-					terrain[x][y] = TERRAINTYPE.WATER;
+					terrain[x][y] = TERRAIN.WATER;
 				} else if (c.getRed() == 0 && c.getGreen() == 0 && c.getBlue() == 0) {
-					terrain[x][y] = TERRAINTYPE.ROCK;
+					terrain[x][y] = TERRAIN.ROCK;
 				} else if (c.getRed() > 230 && c.getGreen() > 230 && c.getBlue() < 100 && !foundAStartPositionBefore) {
 					startPos = new Point2i(x, y);
 				} else {
@@ -83,27 +85,30 @@ public class MapHandler {
 			for (int x = 0; x < map.getWidth(); x++) {
 				Point2i point = new Point2i(x, y);
 				Field field = map.getField(point);
-				if(field.buildingType != BUILDINGTYPE.NONE) {
+				if(field.building != BUILDING.NONE) {
 					// Der er bygning på feltet.
 					//pixels[y*map.getWidth() + x] = getColorForBuildingType(map.getField(point).buildingType);
-					outMap.setRGB(x, y, getColorForBuildingType(field.buildingType));
+					outMap.setRGB(x, y, getColorForBuilding(field.building));
 				} else {
 					// Der er ikke bygning på feltet, udskriv terrain.
 					//pixels[y*map.getWidth() + x] = getColorForTerrainType(map.getField(point).terrainType);
-					outMap.setRGB(x, y, getColorForTerrainType(field.terrainType));
+					outMap.setRGB(x, y, getColorForTerrain(field.terrain));
 				}
-				for(Agent a : agents){
-					if(a.getPos().equals(new Point2i(x,y))){
-						outMap.setRGB(x, y, new Color(100,100,100).getRGB());
+				if(showAgents){
+					for(Agent a : agents){
+						if(a.getPos().equals(new Point2i(x,y))){
+							outMap.setRGB(x, y, new Color(100,100,100).getRGB());
+						}
 					}
 				}
+				
 			}
 		}
 		return outMap;
 	}
 	
-	private static int getColorForBuildingType(BUILDINGTYPE buildingType) {
-		switch (buildingType) {
+	private static int getColorForBuilding(BUILDING building) {
+		switch (building) {
 		case STARTPOSITION:
 			// Create yellow pixel [255,255,0]
 			//return (255<<24) | (255<<16) | (255<<8) | 0;
@@ -112,6 +117,9 @@ public class MapHandler {
 			// Create red pixel [200,0,0]
 //			return (255<<24) | (200<<16) | (0<<8) | 0;
 			return new Color(200,0,0,255).getRGB();
+		case HOUSE:
+			// Create blue pixel [200,100,0]
+			return new Color(200, 100, 0,255).getRGB();
 		case MANSION:
 			// Create darker red pixel [150,0,0]
 //			return (255<<24) | (150<<16) | (0<<8) | 0;
@@ -122,8 +130,8 @@ public class MapHandler {
 		}
 	}
 	
-	private static int getColorForTerrainType(TERRAINTYPE terrainType) {
-		switch (terrainType) {
+	private static int getColorForTerrain(TERRAIN terrain) {
+		switch (terrain) {
 		case FIELD:
 			// Create green pixel [0,255,0]
 //			return (255<<24) | (0<<16) | (255<<8) | 0;
