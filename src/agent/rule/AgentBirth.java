@@ -1,30 +1,30 @@
 package agent.rule;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import model.BUILDING;
 
 public class AgentBirth {
-	ArrayList<BUILDING> birthLocations;
-	double birthRate;
-	Random rand;
+	HashMap<BUILDING, Integer> restrictions;
+	double happyRate;
 	//
 	public AgentBirth(double birthRate){
-		this.birthRate = birthRate;
-		rand = new Random();
-		birthLocations = new ArrayList<BUILDING>();
+		this.happyRate = birthRate;
+		restrictions = new HashMap<BUILDING, Integer>();
 	}
 	
-	public void addBirthLocation(BUILDING type){
-		birthLocations.add(type);
+	public void addRestriction(BUILDING type, int value){
+		if(value > 0) restrictions.put(type, value);
 	}
 	
-	public boolean birth()
+	public double happy(HashMap<BUILDING, Integer> count)
 	{
-		if (rand.nextDouble() < birthRate){
-			return true;
+		for(BUILDING b : restrictions.keySet()){
+			if(!count.containsKey(b)) return 0.0;
+			if(count.get(b) < restrictions.get(b)) return 0.0;
 		}
-		return false;
+		return happyRate;
 	}
 }
