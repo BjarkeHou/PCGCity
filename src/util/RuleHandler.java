@@ -83,8 +83,14 @@ public class RuleHandler {
 		case "HUT":
 			building = BUILDING.HUT;
 			break;
-		case "MANSION":
-			building = BUILDING.MANSION;
+		case "HOUSE":
+			building = BUILDING.HOUSE;
+			break;
+		case "STORE":
+			building = BUILDING.STORE;
+			break;
+		case "MANOR":
+			building = BUILDING.MANOR;
 			break;
 		default:
 			building = BUILDING.NONE;

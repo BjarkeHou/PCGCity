@@ -120,6 +120,9 @@ public class Agent {
 				if(req instanceof TerrainRequirement){
 					if(f.terrain == ((TerrainRequirement) req).getTerrain()) counter++;
 				}
+				if(req instanceof TierRequirement){
+					if(TIER.Convert(f.building) == ((TierRequirement) req).GetTier()) counter++;
+				}
 			}
 		}
 		if(req.upperLimit){
