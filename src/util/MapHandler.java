@@ -112,18 +112,18 @@ public class MapHandler {
 		case STARTPOSITION:
 			// Create yellow pixel [255,255,0]
 			//return (255<<24) | (255<<16) | (255<<8) | 0;
-			return new Color(255,255,255,255).getRGB();
+			return new Color(255,255,0,255).getRGB();
 		case HUT:
 			// Create red pixel [200,0,0]
 //			return (255<<24) | (200<<16) | (0<<8) | 0;
 			return new Color(200,0,0,255).getRGB();
 		case HOUSE:
-			// Create blue pixel [200,100,0]
+			// Create orange pixel [200,100,0]
 			return new Color(200, 100, 0,255).getRGB();
 		case STORE:
-			// Create darker red pixel [150,0,0]
+			// Create purple pixel [200,0,200]
 //			return (255<<24) | (150<<16) | (0<<8) | 0;
-			return new Color(150,0,150,255).getRGB();
+			return new Color(200,0,200,255).getRGB();
 		default:
 //			return (255<<24) | (255<<16) | (255<<8) | 255;
 			return new Color(255,255,255,255).getRGB();
