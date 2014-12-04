@@ -65,8 +65,8 @@ public class MapHandler {
 		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		img = translateMap(map, img, agents);
 		
-		File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
-		//File file = new File("C:\\Users\\Oragada\\Desktop\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
+		//File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
+		File file = new File("C:\\Users\\Oragada\\Desktop\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
 		try {
 			ImageIO.write(img, "png", file);
 		} catch (IOException e) {
@@ -120,10 +120,10 @@ public class MapHandler {
 		case HOUSE:
 			// Create blue pixel [200,100,0]
 			return new Color(200, 100, 0,255).getRGB();
-		case MANOR:
+		case STORE:
 			// Create darker red pixel [150,0,0]
 //			return (255<<24) | (150<<16) | (0<<8) | 0;
-			return new Color(150,0,0,255).getRGB();
+			return new Color(150,0,150,255).getRGB();
 		default:
 //			return (255<<24) | (255<<16) | (255<<8) | 255;
 			return new Color(255,255,255,255).getRGB();

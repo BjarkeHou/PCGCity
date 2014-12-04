@@ -5,7 +5,7 @@ import model.TIER;
 public class TierRequirement extends Requirement {
 	TIER tier;
 
-	protected TierRequirement(int value, boolean upperLimit, TIER t) {
+	public TierRequirement(int value, boolean upperLimit, TIER t) {
 		super(value, upperLimit);
 		tier = t;
 	}

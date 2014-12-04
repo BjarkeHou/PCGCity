@@ -9,6 +9,7 @@ import java.util.Set;
 import model.BUILDING;
 import model.Map;
 import model.TERRAIN;
+import model.TIER;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -22,6 +23,7 @@ import agent.rule.CONSTRAINT;
 import agent.rule.Restriction;
 import agent.rule.Rule;
 import agent.rule.TerrainRequirement;
+import agent.rule.TierRequirement;
 
 public class AgentHandler {
 
@@ -130,6 +132,9 @@ public class AgentHandler {
 					TERRAIN terrainType = getTerrain((String)jReq.get("TARGET"));
 					newRule.addRequirement(new TerrainRequirement((int)value, isUpperLimit, terrainType));
 					break;
+				case "TIER":
+					TIER tierType = getTier((String) jReq.get("TARGET"));
+					newRule.addRequirement(new TierRequirement((int)value, isUpperLimit, tierType));
 				default:
 					break;
 				}
@@ -138,6 +143,19 @@ public class AgentHandler {
 			rules.add(newRule);
 		}
 		return rules;
+	}
+
+	private TIER getTier(String val) {
+		switch (val){
+		case ("T1"):
+			return TIER.T1;
+		case ("T2"):
+			return TIER.T2;
+		case ("T3"):
+			return TIER.T3;
+		default:
+			return TIER.T1;
+		}
 	}
 
 	private BUILDING getBuilding(String val) {
