@@ -132,6 +132,9 @@ public class Controller {
 		if(map == null)
 			return;
 		
+		if(!agentHandler.getAllAgentTypes().contains(type))
+			return;
+		
 		switch (type) {
 		case HUT:
 			agents.add(agentHandler.getAgentOfType(BUILDING.HUT, map, pos));
