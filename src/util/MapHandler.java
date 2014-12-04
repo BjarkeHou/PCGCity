@@ -117,6 +117,8 @@ public class MapHandler {
 			// Create red pixel [200,0,0]
 //			return (255<<24) | (200<<16) | (0<<8) | 0;
 			return new Color(200,0,0,255).getRGB();
+		case STORE:
+			return new Color(200,0,200,255).getRGB();
 		case HOUSE:
 			// Create blue pixel [200,100,0]
 			return new Color(200, 100, 0,255).getRGB();

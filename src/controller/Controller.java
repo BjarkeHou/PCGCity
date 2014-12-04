@@ -141,17 +141,7 @@ public class Controller {
 		if(!agentHandler.getAllAgentTypes().contains(type))
 			return;
 		
-		switch (type) {
-		case HUT:
-			agents.add(agentHandler.getAgentOfType(BUILDING.HUT, map, pos));
-			break;
-		case HOUSE: 
-			agents.add(agentHandler.getAgentOfType(BUILDING.HOUSE, map, pos));
-			break;
-		default:
-			break;
-		}
-		
+		agents.add(agentHandler.getAgentOfType(type, map, pos));
 		gui.setAmountOfAgentsLbl(agents.size());
 	}
 	
