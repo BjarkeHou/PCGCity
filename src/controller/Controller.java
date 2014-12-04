@@ -142,6 +142,8 @@ public class Controller {
 			return;
 		
 		agents.add(agentHandler.getAgentOfType(type, map, pos));
+		
+		
 		gui.setAmountOfAgentsLbl(agents.size());
 	}
 	
