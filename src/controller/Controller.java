@@ -78,7 +78,8 @@ public class Controller {
 		gui.setAmountOfAgentsLbl(agents.size());
 		
 		//Update map
-		MapHandler.writeMapToFile(map, currentTimeStep, agents, gui.showAgents());
+		if(gui.writeFiles() && timestep%gui.getWriteFileRate() == 0)
+			MapHandler.writeMapToFile(map, currentTimeStep, agents, gui.getPathToWriteFiles(), gui.showAgents());
 		currentTimeStep++;
 		gui.setCurrentTimeStep(currentTimeStep);
 		gui.updateProgressBar(currentTimeStep);
@@ -122,6 +123,8 @@ public class Controller {
 		if(map == null)
 			return;
 				
+		
+		// TODO FIX THIS!
 		if(!agentHandler.getAllAgentTypes().contains(BUILDING.HUT))
 			return;
 	

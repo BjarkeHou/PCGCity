@@ -60,12 +60,12 @@ public class MapHandler {
 		return m;
 	}
 
-	public static void writeMapToFile(Map map, int timeStep, ArrayList<Agent> agents, boolean showAgents) {
+	public static void writeMapToFile(Map map, int timeStep, ArrayList<Agent> agents, String path, boolean showAgents) {
 
 		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		img = translateMap(map, img, agents, showAgents);
 		
-		File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
+		File file = new File(path + "PCGCity_generated_map_ts" + timeStep + ".png");
 		//File file = new File("C:\\Users\\Oragada\\Desktop\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
 		try {
 			ImageIO.write(img, "png", file);
