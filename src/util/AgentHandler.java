@@ -27,13 +27,14 @@ public class AgentHandler {
 
 	private HashMap<BUILDING, Agent> agentTypes = new HashMap<BUILDING, Agent>();
 	
-	public void loadAgentFromFile(String pathToFile) throws IOException {
+	public String loadAgentFromFile(String pathToFile) throws IOException {
 		
 		// Load agent from file and put it into agentTypes
 		// Implement getAgentOfType(type, startPos)
+		String returnName = "Not an agent"; 
 		
 		if(pathToFile.isEmpty())
-			return;
+			return returnName;
 		
 		JSONParser jParser = new JSONParser();
 		
@@ -56,12 +57,18 @@ public class AgentHandler {
 			ArrayList<Rule> rules = extractRules((JSONArray) jObj.get("RULES")); 
 			Agent a = new Agent(type, agentBirth, (int)retirement);
 			for(Rule r : rules) a.addRule(r);
+			
+			// Get name
+			returnName = (String)jObj.get("NAME");
+			
 			agentTypes.put(type, a);
 			
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return returnName;
 	}
 	
 	public Agent getAgentOfType(BUILDING type, Map m, Point2i startPos) {

@@ -59,7 +59,6 @@ public class AppWindow implements ActionListener {
 	private JLabel lblConstant3;
 	private JPanel initMapPanel;
 	private JPanel currentMapPanel;
-	private JButton btnSettings;
 
 
 	/**
@@ -75,7 +74,7 @@ public class AppWindow implements ActionListener {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 800, 800);
+		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
@@ -87,9 +86,7 @@ public class AppWindow implements ActionListener {
 
 		btnLoadRule = new JButton("Load new rule");
 		buttonPanel.add(btnLoadRule);
-		
-		btnSettings = new JButton("Settings");
-		buttonPanel.add(btnSettings);
+
 
 		btnAdd = new JButton("Add agent");
 		buttonPanel.add(btnAdd);
@@ -135,7 +132,7 @@ public class AppWindow implements ActionListener {
 		settingsPanel.add(timePanel);
 		timePanel.setLayout(new BoxLayout(timePanel, BoxLayout.Y_AXIS));
 
-		lblCurrentTimestep = new JLabel("Current timestep: 0");
+		lblCurrentTimestep = new JLabel("Current timestep:");
 		timePanel.add(lblCurrentTimestep);
 
 		lblMaxTimestep = new JLabel("Max timestep: 0");
@@ -149,7 +146,7 @@ public class AppWindow implements ActionListener {
 		agentTypePanel = new JPanel();
 		agentTypePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		settingsPanel.add(agentTypePanel);
-		agentTypePanel.setLayout(new BoxLayout(agentTypePanel, BoxLayout.X_AXIS));
+		agentTypePanel.setLayout(new BoxLayout(agentTypePanel, BoxLayout.Y_AXIS));
 
 		
 
@@ -202,6 +199,11 @@ public class AppWindow implements ActionListener {
 		progressBar.setValue(progress);
 		progressBar.revalidate();
 	}
+	
+	public void addAgentType(String name) {
+		agentTypePanel.add(new JLabel(name));
+		agentTypePanel.revalidate();
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -220,13 +222,6 @@ public class AppWindow implements ActionListener {
 			}
 		} else if(e.getSource() == btnGo) {
 			con.doRestOfTimeSteps();
-		} else if(e.getSource() == btnSettings) {
-			// Create new frame with forms for setting
-			// Max timestep
-			// Happy Time rate
-			// Happy Time frequency
-			// Death Rate for agents
-			
 		} else if(e.getSource() == btnStep) {
 			con.doOneTimeStep();
 		} else if(e.getSource() == btnAdd) {

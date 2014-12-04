@@ -151,7 +151,8 @@ public class Controller {
 	
 	public void loadAgentOnPath(String pathToFile) {
 		try {
-			agentHandler.loadAgentFromFile(pathToFile);
+			String name = agentHandler.loadAgentFromFile(pathToFile);
+			gui.addAgentType(name);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
