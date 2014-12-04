@@ -216,7 +216,7 @@ public class AppWindow implements ActionListener {
 			int returnVal = fc.showOpenDialog(frame);
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
-				con.loadRuleOnPath(file.getPath());
+				con.loadAgentOnPath(file.getPath());
 			}
 		} else if(e.getSource() == btnGo) {
 			con.doRestOfTimeSteps();

@@ -6,15 +6,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import model.*;
+import model.BUILDING;
+import model.Map;
+import util.AgentHandler;
 import util.MapHandler;
 import util.Point2i;
 import util.Rand;
-import util.RuleHandler;
 import agent.Agent;
 import agent.HouseAgent;
 import agent.HutAgent;
 import agent.rule.AgentBirth;
+import agent.rule.Restriction;
 
 public class Controller {
 	private ArrayList<Agent> agents;
@@ -22,6 +24,7 @@ public class Controller {
 	private Map map;
 	private ArrayList<Point2i> buildingList;
 	private AppWindow gui;
+	private AgentHandler agentHandler;
 	
 	private int totalTimeSteps = 300;
 	private int currentTimeStep = 0;
@@ -32,7 +35,9 @@ public class Controller {
 	
 	public Controller() {
 		agents = new ArrayList<Agent>();
+		agentHandler = new AgentHandler();
 		buildingList = new ArrayList<Point2i>();
+		
 		
 		CreateBirthParameters();
 
@@ -69,7 +74,7 @@ public class Controller {
 			//Moving
 			agent.move(currentTimeStep);
 			//Retirement
-			if(agent.getInefficiencyCounter() > deathRate) agentsToRemove.add(agent);
+			if(agent.getRetirementStatus()) agentsToRemove.add(agent);
 		}
 		
 		//Retire old agents
@@ -121,7 +126,8 @@ public class Controller {
 		if(map == null)
 			return;
 					
-		agents.add(new HutAgent(map.getStartPos(), map));
+		Agent a = agentHandler.getAgentOfType(BUILDING.HUT, map, map.getStartPos());
+		agents.add(a);
 		gui.setAmountOfAgentsLbl(agents.size());
 	}
 	
@@ -131,10 +137,11 @@ public class Controller {
 		
 		switch (type) {
 		case HUT:
-			agents.add(new HutAgent(pos, map));
+			agents.add(agentHandler.getAgentOfType(BUILDING.HUT, map, pos));
 			break;
-		case HOUSE:
-			agents.add(new HouseAgent(pos, map));
+		case HOUSE: 
+			agents.add(agentHandler.getAgentOfType(BUILDING.HOUSE, map, pos));
+			break;
 		default:
 			break;
 		}
@@ -146,13 +153,13 @@ public class Controller {
 		birthParameters = new HashMap<BUILDING, AgentBirth>();
 		birthParameters.put(BUILDING.HUT, new AgentBirth(0.15));
 		AgentBirth ab1 = new AgentBirth(0.02);
-		ab1.addRestriction(BUILDING.HUT, 20);
+		ab1.addRestriction(new Restriction(BUILDING.HUT, 20));
 		birthParameters.put(BUILDING.HOUSE, ab1);	
 	}
 	
-	public void loadRuleOnPath(String pathToFile) {
+	public void loadAgentOnPath(String pathToFile) {
 		try {
-			RuleHandler.loadRulesFromFile(pathToFile);
+			agentHandler.loadAgentFromFile(pathToFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

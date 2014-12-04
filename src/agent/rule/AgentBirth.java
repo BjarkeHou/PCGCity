@@ -7,23 +7,23 @@ import java.util.Random;
 import model.BUILDING;
 
 public class AgentBirth {
-	HashMap<BUILDING, Integer> restrictions;
+	ArrayList<Restriction> restrictions;
 	double happyRate;
 	//
 	public AgentBirth(double birthRate){
 		this.happyRate = birthRate;
-		restrictions = new HashMap<BUILDING, Integer>();
+		restrictions = new ArrayList<Restriction>();
 	}
 	
-	public void addRestriction(BUILDING type, int value){
-		if(value > 0) restrictions.put(type, value);
+	public void addRestriction(Restriction r){
+		restrictions.add(r);
 	}
 	
 	public double happy(HashMap<BUILDING, Integer> count)
 	{
-		for(BUILDING b : restrictions.keySet()){
-			if(!count.containsKey(b)) return 0.0;
-			if(count.get(b) < restrictions.get(b)) return 0.0;
+		for(Restriction r : restrictions){
+			if(!count.containsKey(r.getBuildingType())) return 0.0;
+			if(count.get(r.getBuildingType()) < r.getAmount()) return 0.0;
 		}
 		return happyRate;
 	}

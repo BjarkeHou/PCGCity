@@ -8,27 +8,45 @@ import model.*;
 import util.Point2i;
 import util.Rand;
 
-public abstract class Agent {
+public class Agent {
 	protected Point2i startPos;
 	protected Point2i currentPos;
 	protected BUILDING build; 
 	protected ArrayList<Rule> ruleList;
-	protected Point2i moveModifiers;
 	private Map map;
+	private int retirementValue;
 	protected AgentBirth birth;
 	
 	protected int inefficiencyCounter = 0;
+	
+	public Agent(BUILDING type, AgentBirth birth, int retirement){
+		this.startPos = Point2i.Zero();
+		this.currentPos = Point2i.Zero();
+		this.birth = birth;
+		this.retirementValue = retirement;
+		build = type;
+		ruleList = new ArrayList<Rule>();
+	}
 	
 	public Agent(Point2i startPos, BUILDING type, Map m){
 		this.startPos = startPos;
 		this.currentPos = startPos;
 		build = type;
+		this.map = m;
 		ruleList = new ArrayList<Rule>();
-		map = m;
 	}
 	
 	public void addRule(Rule r){
 		ruleList.add(r);
+	}
+	
+	public void supplyMap(Map m) {
+		map = m;
+	}
+	
+	public void supplyStartPos(Point2i startPos) {
+		this.startPos = startPos;
+		this.currentPos = this.startPos;
 	}
 	
 	public Point2i getPos() {
@@ -40,8 +58,10 @@ public abstract class Agent {
 	}
 	
 	public boolean testCurrentField() {
+		if(map == null)
+			return false;
+		
 		Map map = this.map;
-		moveModifiers = Point2i.Zero();
 		boolean totalCondition = true;
 		for(Rule rule : ruleList){
 			
@@ -129,7 +149,16 @@ public abstract class Agent {
 		return false;
 	}
 	
-	public int getInefficiencyCounter() {
-		return inefficiencyCounter;
+	public boolean getRetirementStatus() {
+		return inefficiencyCounter>=retirementValue;
+	}
+	
+	public Agent clone() {
+		Agent clone = new Agent(this.build, this.birth, this.retirementValue);
+		if(this.map != null) clone.supplyMap(this.map);
+		if(this.startPos != Point2i.Zero()) clone.supplyStartPos(this.startPos);
+		for(Rule r : ruleList) clone.addRule(r);
+
+		return clone;
 	}
 }
