@@ -8,7 +8,8 @@ import model.*;
 import util.Point2i;
 import util.Rand;
 
-public abstract class Agent {
+public class Agent {
+	public String name;
 	protected Point2i startPos;
 	protected Point2i currentPos;
 	protected BUILDING build; 
@@ -19,7 +20,8 @@ public abstract class Agent {
 	
 	protected int inefficiencyCounter = 0;
 	
-	public Agent(Point2i startPos, BUILDING type, Map m){
+	public Agent(String name, Point2i startPos, BUILDING type, Map m){
+		this.name = name;
 		this.startPos = startPos;
 		this.currentPos = startPos;
 		build = type;
