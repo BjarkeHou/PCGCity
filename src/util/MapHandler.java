@@ -60,7 +60,7 @@ public class MapHandler {
 		return m;
 	}
 
-	public static void writeMapToFile(Map map, int timeStep, ArrayList<Agent> agents, boolean showAgents) {
+	public static void writeMapToFile(Map map, int timeStep, ArrayList<Agent> agents, String path, boolean showAgents) {
 
 		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		img = translateMap(map, img, agents, showAgents);

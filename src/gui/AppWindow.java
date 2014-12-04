@@ -21,11 +21,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+
+
+
 
 
 
@@ -67,6 +74,13 @@ public class AppWindow implements ActionListener {
 	private JLabel lblConstant3;
 	private JPanel initMapPanel;
 	private JPanel currentMapPanel;
+	private JPanel fileIOPanel;
+	private JLabel lblFileOut;
+	private JCheckBox fileOut;
+	private JLabel lblFileOutRate;
+	private JSpinner fileOutRate;
+	private JLabel lblFileOutPath;
+	private JTextField fileOutPath;
 	private JSpinner maxTimeStepsSpinner;
 	private JLabel lblShowAgents;
 	private JCheckBox showAgents;
@@ -120,6 +134,7 @@ public class AppWindow implements ActionListener {
 		frame.getContentPane().add(settingsPanel, BorderLayout.WEST);
 		settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
 
+		// Agents
 		lblConstant1 = new JLabel("Agents");
 		lblConstant1.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 		settingsPanel.add(lblConstant1);
@@ -150,6 +165,7 @@ public class AppWindow implements ActionListener {
 		lblAmountOfAgents = new JLabel("Current count of agents: 0");
 		agentsPanel.add(lblAmountOfAgents);
 
+		// Time
 		lblConstant2 = new JLabel("Time");
 		lblConstant2.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 		lblConstant2.setHorizontalAlignment(SwingConstants.LEFT);
@@ -170,20 +186,58 @@ public class AppWindow implements ActionListener {
 		maxTimeStepsSpinner.setMaximumSize(new Dimension(150, 30));
 		maxTimeStepsSpinner.setValue(400);
 		timePanel.add(maxTimeStepsSpinner);
+		
+		// IO
+		JLabel lblLort = new JLabel("File IO:");
+		lblConstant2.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+		lblConstant2.setHorizontalAlignment(SwingConstants.LEFT);
+		settingsPanel.add(lblLort);
+		
+		fileIOPanel = new JPanel();
+		fileIOPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		settingsPanel.add(fileIOPanel);
+		fileIOPanel.setLayout(new BoxLayout(fileIOPanel, BoxLayout.Y_AXIS));
+		
+		lblFileOut = new JLabel("Write map to files:");
+		fileIOPanel.add(lblFileOut);
+		
+		fileOut = new JCheckBox();
+		fileOut.setSelected(true);
+		fileIOPanel.add(fileOut);
+		
+		lblFileOutRate = new JLabel("Rate of files:");
+		fileIOPanel.add(lblFileOutRate);
+		
+		fileOutRate = new JSpinner();
+		fileOutRate.setMaximumSize(new Dimension(150, 30));
+		fileOutRate.setValue(10);
+		fileIOPanel.add(fileOutRate);
+		
+		lblFileOutPath = new JLabel("Write files to:");
+		fileIOPanel.add(lblFileOutPath);
+		
+		fileOutPath = new JTextField();
+		fileOutPath.setMaximumSize(new Dimension(150,30));
+		String defaultPath = "";
+		if(System.getProperty("os.name").toLowerCase().equals("windows")) {
+			defaultPath = "C:\\Users\\Username\\Desktop\\PCGCity";
+		} else if(System.getProperty("os.name").toLowerCase().equals("mac")) {
+			defaultPath = "/Users/Username/Desktop/PCGCity";
+		}
+		fileOutPath.setText(defaultPath);
+		fileIOPanel.add(fileOutPath);
 
+		
+		// Buttom
 		lblConstant3 = new JLabel("Agent Types Loaded:");
 		settingsPanel.add(lblConstant3);
 		lblConstant3.setHorizontalAlignment(SwingConstants.LEFT);
 		lblConstant3.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-
+		
 		agentTypePanel = new JPanel();
 		agentTypePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		settingsPanel.add(agentTypePanel);
 		agentTypePanel.setLayout(new BoxLayout(agentTypePanel, BoxLayout.Y_AXIS));
-
-		
-
-		
 
 		progressPanel = new JPanel();
 		frame.getContentPane().add(progressPanel, BorderLayout.SOUTH);
@@ -250,10 +304,30 @@ public class AppWindow implements ActionListener {
 	public int getFertilityRate() {
 		return (int)fertilitySpinner.getValue();
 	}
+	
+	public boolean writeFiles() {
+		return fileOut.isSelected();
+	}
+	
+	public String getPathToWriteFiles() {
+		String path = fileOutPath.getText();
+		if(!path.endsWith("/") && System.getProperty("os.name").toLowerCase().equals("mac"))
+			path = path + "/";
+		else if(!path.endsWith("\\") && System.getProperty("os.name").toLowerCase().equals("windows"))
+			path = path + "\\";
+		
+		return path;
+	}
+	
+	public int getWriteFileRate() {
+		return (int)fileOutRate.getValue();
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnLoadMap) {
+			JFileChooser fc = new JFileChooser();
+			fc.setFileFilter(new FileNameExtensionFilter("Map files","png", "PNG"));
 			int returnVal = fc.showOpenDialog(frame);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -261,6 +335,8 @@ public class AppWindow implements ActionListener {
 				con.loadMapOnPath(file.getPath());
 			}
 		} else if(e.getSource() == btnLoadRule) {
+			JFileChooser fc = new JFileChooser();
+			fc.setFileFilter(new FileNameExtensionFilter("Agent files", "json", "JSON"));
 			int returnVal = fc.showOpenDialog(frame);
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
