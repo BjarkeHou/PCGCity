@@ -9,6 +9,7 @@ import util.Point2i;
 import util.Rand;
 
 public class Agent {
+	public String name;
 	protected Point2i startPos;
 	protected Point2i currentPos;
 	protected BUILDING build; 
@@ -137,6 +138,9 @@ public class Agent {
 				}
 				if(req instanceof TerrainRequirement){
 					if(f.terrain == ((TerrainRequirement) req).getTerrain()) counter++;
+				}
+				if(req instanceof TierRequirement){
+					if(TIER.Convert(f.building) == ((TierRequirement) req).GetTier()) counter++;
 				}
 			}
 		}

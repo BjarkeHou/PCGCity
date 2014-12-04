@@ -8,7 +8,7 @@ public class HutAgent extends Agent {
 
 	
 	public HutAgent(Point2i startPos, Map map) {
-		super(startPos, BUILDING.HUT, map);
+		super("HutAgent", startPos, BUILDING.HUT, 10, map);
 		
 		//Nothing must be built on the square I am standing on
 		Rule r1 = new Rule(0, CONSTRAINT.ALL);

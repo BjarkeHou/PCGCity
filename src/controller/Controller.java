@@ -31,13 +31,12 @@ public class Controller {
 	
 	//private int happyTimeChance = 10;
 	private int happyTimeRate = 10;
-	private int deathRate = 5;
+	//private int deathRate = 5;
 	
 	public Controller() {
 		agents = new ArrayList<Agent>();
 		agentHandler = new AgentHandler();
 		buildingList = new ArrayList<Point2i>();
-		
 		
 		CreateBirthParameters();
 

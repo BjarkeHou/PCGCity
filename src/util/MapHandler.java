@@ -120,7 +120,7 @@ public class MapHandler {
 		case HOUSE:
 			// Create blue pixel [200,100,0]
 			return new Color(200, 100, 0,255).getRGB();
-		case MANSION:
+		case MANOR:
 			// Create darker red pixel [150,0,0]
 //			return (255<<24) | (150<<16) | (0<<8) | 0;
 			return new Color(150,0,0,255).getRGB();
