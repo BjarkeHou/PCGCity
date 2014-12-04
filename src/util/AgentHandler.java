@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import model.BUILDING;
 import model.Map;
@@ -72,6 +73,14 @@ public class AgentHandler {
 		} else { 
 			return null;
 		}
+	}
+	
+	public AgentBirth getAgentBirth(BUILDING b){
+		return agentTypes.get(b).getAgentBirth();
+	}
+	
+	public Set<BUILDING> getAllAgentTypes(){
+		return agentTypes.keySet();
 	}
 	
 	private ArrayList<Restriction> extractRestrictions(JSONArray jRestrictions) {

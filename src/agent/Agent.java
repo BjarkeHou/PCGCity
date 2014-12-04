@@ -165,4 +165,8 @@ public class Agent {
 
 		return clone;
 	}
+
+	public AgentBirth getAgentBirth() {
+		return birth;
+	}
 }

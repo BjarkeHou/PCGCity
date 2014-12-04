@@ -20,7 +20,7 @@ import agent.rule.Restriction;
 
 public class Controller {
 	private ArrayList<Agent> agents;
-	private HashMap<BUILDING, AgentBirth> birthParameters;
+	//private HashMap<BUILDING, AgentBirth> birthParameters;
 	private Map map;
 	private ArrayList<Point2i> buildingList;
 	private AppWindow gui;
@@ -37,8 +37,6 @@ public class Controller {
 		agents = new ArrayList<Agent>();
 		agentHandler = new AgentHandler();
 		buildingList = new ArrayList<Point2i>();
-		
-		CreateBirthParameters();
 
 		gui = new AppWindow(this);
 		gui.frame.setVisible(true);
@@ -100,7 +98,7 @@ public class Controller {
 		//spawn for each building
 		ArrayList<Point2i> pointsToRemove = new ArrayList<Point2i>();
 		for (Point2i point : buildingList){
-			double happyRate = birthParameters.get(map.getField(point).building).happy(buildingCount);
+			double happyRate = agentHandler.getAgentBirth(map.getField(point).building).happy(buildingCount);
 			if(happyRate > Rand.GetDouble()){
 				addNewAgent(point, map.getField(point).building);
 				pointsToRemove.add(point);
@@ -111,8 +109,8 @@ public class Controller {
 		for(Point2i point : pointsToRemove) buildingList.remove(point);
 		
 		//spawn for start position
-		for (BUILDING b : birthParameters.keySet()){
-			double happyRate = birthParameters.get(b).happy(buildingCount);
+		for (BUILDING b : agentHandler.getAllAgentTypes()){
+			double happyRate = agentHandler.getAgentBirth(b).happy(buildingCount);
 			if(happyRate > Rand.GetDouble() || (happyRate > 0.0 && (!buildingCount.containsKey(b)))){
 				addNewAgent(map.getStartPos(), b);
 			}
@@ -146,14 +144,6 @@ public class Controller {
 		}
 		
 		gui.setAmountOfAgentsLbl(agents.size());
-	}
-	
-	private void CreateBirthParameters() {
-		birthParameters = new HashMap<BUILDING, AgentBirth>();
-		birthParameters.put(BUILDING.HUT, new AgentBirth(0.15));
-		AgentBirth ab1 = new AgentBirth(0.02);
-		ab1.addRestriction(new Restriction(BUILDING.HUT, 20));
-		birthParameters.put(BUILDING.HOUSE, ab1);	
 	}
 	
 	public void loadAgentOnPath(String pathToFile) {
