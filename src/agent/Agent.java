@@ -17,16 +17,18 @@ public class Agent {
 	protected Point2i moveModifiers;
 	private Map map;
 	protected AgentBirth birth;
+	protected int retire;
 	
 	protected int inefficiencyCounter = 0;
 	
-	public Agent(String name, Point2i startPos, BUILDING type, Map m){
+	public Agent(String name, Point2i startPos, BUILDING type, int retire, Map m){
 		this.name = name;
 		this.startPos = startPos;
 		this.currentPos = startPos;
 		build = type;
 		ruleList = new ArrayList<Rule>();
 		map = m;
+		this.retire = retire;
 	}
 	
 	public void addRule(Rule r){
@@ -136,5 +138,9 @@ public class Agent {
 	
 	public int getInefficiencyCounter() {
 		return inefficiencyCounter;
+	}
+
+	public boolean retirementAge() {
+		return inefficiencyCounter > retire;
 	}
 }

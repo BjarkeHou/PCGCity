@@ -28,7 +28,7 @@ public class Controller {
 	
 	//private int happyTimeChance = 10;
 	private int happyTimeRate = 10;
-	private int deathRate = 5;
+	//private int deathRate = 5;
 	
 	public Controller() {
 		agents = new ArrayList<Agent>();
@@ -69,7 +69,7 @@ public class Controller {
 			//Moving
 			agent.move(currentTimeStep);
 			//Retirement
-			if(agent.getInefficiencyCounter() > deathRate) agentsToRemove.add(agent);
+			if(agent.retirementAge()) agentsToRemove.add(agent);
 		}
 		
 		//Retire old agents

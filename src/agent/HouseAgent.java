@@ -12,7 +12,7 @@ import util.Point2i;
 public class HouseAgent extends Agent {
 
 	public HouseAgent(Point2i startPos, Map m) {
-		super("HouseAgent", startPos, BUILDING.HOUSE, m);
+		super("HouseAgent", startPos, BUILDING.HOUSE, 10, m);
 		
 		//I must build on land
 		Rule r1 = new Rule(0, CONSTRAINT.ALL);
