@@ -60,10 +60,10 @@ public class MapHandler {
 		return m;
 	}
 
-	public static void writeMapToFile(Map map, int timeStep, ArrayList<Agent> agents) {
+	public static void writeMapToFile(Map map, int timeStep, ArrayList<Agent> agents, boolean showAgents) {
 
 		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		img = translateMap(map, img, agents);
+		img = translateMap(map, img, agents, showAgents);
 		
 		//File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
 		File file = new File("C:\\Users\\Oragada\\Desktop\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
@@ -75,12 +75,12 @@ public class MapHandler {
 		}
 	}
 	
-	public static BufferedImage convertMapToImage(Map map, ArrayList<Agent> agents) {
+	public static BufferedImage convertMapToImage(Map map, ArrayList<Agent> agents, boolean showAgents) {
 		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		return translateMap(map, img, agents);
+		return translateMap(map, img, agents, showAgents);
 	}
 	
-	private static BufferedImage translateMap(Map map, BufferedImage outMap, ArrayList<Agent> agents) {
+	private static BufferedImage translateMap(Map map, BufferedImage outMap, ArrayList<Agent> agents, boolean showAgents) {
 		for (int y = 0; y < map.getHeight(); y++) {
 			for (int x = 0; x < map.getWidth(); x++) {
 				Point2i point = new Point2i(x, y);

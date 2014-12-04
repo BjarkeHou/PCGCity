@@ -26,7 +26,6 @@ public class Controller {
 	private AppWindow gui;
 	private AgentHandler agentHandler;
 	
-	private int totalTimeSteps = 300;
 	private int currentTimeStep = 0;
 	
 	//private int happyTimeChance = 10;
@@ -42,7 +41,7 @@ public class Controller {
 		gui.frame.setVisible(true);
 	}
 
-	public void doRestOfTimeSteps() {
+	public void doRestOfTimeSteps(int totalTimeSteps) {
 		while(currentTimeStep < totalTimeSteps) {
 			doOneTimeStep();
 		}
@@ -53,7 +52,7 @@ public class Controller {
 		
 		timeStep(currentTimeStep);
 		
-		if(currentTimeStep%happyTimeRate == 0){
+		if(currentTimeStep%gui.getFertilityRate() == 0){
 			performHappyTime();
 		}
 	}
@@ -79,11 +78,11 @@ public class Controller {
 		gui.setAmountOfAgentsLbl(agents.size());
 		
 		//Update map
-		MapHandler.writeMapToFile(map, currentTimeStep, agents);
+		MapHandler.writeMapToFile(map, currentTimeStep, agents, gui.showAgents());
 		currentTimeStep++;
 		gui.setCurrentTimeStep(currentTimeStep);
 		gui.updateProgressBar(currentTimeStep);
-		gui.setCurrentMap(MapHandler.convertMapToImage(map, agents));
+		gui.setCurrentMap(MapHandler.convertMapToImage(map, agents, gui.showAgents()));
 	}
 	
 	private void performHappyTime() {
@@ -122,9 +121,13 @@ public class Controller {
 	public void addNewAgent() {
 		if(map == null)
 			return;
-					
+				
+		if(!agentHandler.getAllAgentTypes().contains(BUILDING.HUT))
+			return;
+	
 		Agent a = agentHandler.getAgentOfType(BUILDING.HUT, map, map.getStartPos());
 		agents.add(a);
+		gui.setAmountOfStartAgentsLbl(agents.size());
 		gui.setAmountOfAgentsLbl(agents.size());
 	}
 	
@@ -162,7 +165,7 @@ public class Controller {
 	public void loadMapOnPath(String pathToFile) {
 		try {
 			map = MapHandler.loadMap(pathToFile);
-			gui.setInitialMap(MapHandler.convertMapToImage(map, agents));
+			gui.setInitialMap(MapHandler.convertMapToImage(map, agents, false));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -171,8 +174,5 @@ public class Controller {
 			e.printStackTrace();
 		}
 	}
-	
-	public int getTotalTimeStep() {
-		return totalTimeSteps;
-	}
+
 }
