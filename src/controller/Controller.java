@@ -70,8 +70,8 @@ public class Controller {
 			agent.move(currentTimeStep);
 			//Retirement
 			if(agent.getInefficiencyCounter() > deathRate) agentsToRemove.add(agent);
-			
 		}
+		
 		//Retire old agents
 		for(Agent a : agentsToRemove) agents.remove(a);
 		gui.setAmountOfAgentsLbl(agents.size());
@@ -94,12 +94,18 @@ public class Controller {
 			buildingCount.put(b, buildingCount.get(b)+1);
 		}
 		//spawn for each building
+		ArrayList<Point2i> pointsToRemove = new ArrayList<Point2i>();
 		for (Point2i point : buildingList){
 			double happyRate = birthParameters.get(map.getField(point).building).happy(buildingCount);
 			if(happyRate > Rand.GetDouble()){
 				addNewAgent(point, map.getField(point).building);
+				pointsToRemove.add(point);
 			}
 		}
+		
+		//Remove points that has spawned before
+		for(Point2i point : pointsToRemove) buildingList.remove(point);
+		
 		//spawn for start position
 		for (BUILDING b : birthParameters.keySet()){
 			double happyRate = birthParameters.get(b).happy(buildingCount);
@@ -141,8 +147,7 @@ public class Controller {
 		birthParameters.put(BUILDING.HUT, new AgentBirth(0.15));
 		AgentBirth ab1 = new AgentBirth(0.02);
 		ab1.addRestriction(BUILDING.HUT, 20);
-		birthParameters.put(BUILDING.HOUSE, ab1);
-		
+		birthParameters.put(BUILDING.HOUSE, ab1);	
 	}
 	
 	public void loadRuleOnPath(String pathToFile) {
