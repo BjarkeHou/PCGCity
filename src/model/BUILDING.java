@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public enum BUILDING {
-	NONE, STARTPOSITION, HUT, HOUSE, STORE, MANOR;
+	NONE, STARTPOSITION, HUT, HOUSE, STORE, TOWNHOUSE;
 	
 	public static ArrayList<BUILDING> GetTierBuildings(TIER tier){
 		ArrayList<BUILDING> list = new ArrayList<BUILDING>();
@@ -17,7 +17,7 @@ public enum BUILDING {
 			list.add(STORE);
 			break;
 		case T3:
-			list.add(MANOR);
+			list.add(TOWNHOUSE);
 			break;
 		}
 		

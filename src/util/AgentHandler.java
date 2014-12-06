@@ -162,29 +162,24 @@ public class AgentHandler {
 		BUILDING type = null;
 		
 		for(BUILDING building : BUILDING.values()) {
-			if(val.equalsIgnoreCase(building.name()))
+			if(val.equalsIgnoreCase(building.name())) {
 				type = building;
+				break;
+			}
 		}
 		
 		return type != null ? type : BUILDING.NONE;
 	}
 	
 	private TERRAIN getTerrain(String val) {
-		TERRAIN terrain;
-		switch (val) {
-		case "WATER":
-			terrain = TERRAIN.WATER;
-			break;
-		case "FIELD":
-			terrain = TERRAIN.FIELD;
-			break;
-		case "ROCK":
-			terrain = TERRAIN.ROCK;
-			break;
-		default:
-			terrain = TERRAIN.OUTERSPACE;
-			break;
+		TERRAIN type = null;
+		
+		for(TERRAIN terrain : TERRAIN.values()) {
+			if(val.equalsIgnoreCase(terrain.name())) {
+				type = terrain;
+				break;
+			}
 		} 
-		return terrain;
+		return type;
 	}
 }
