@@ -10,7 +10,7 @@ public enum TIER {
 		case HOUSE:
 		case STORE:
 			return T2;
-		case MANOR:
+		case TOWNHOUSE:
 			return T3;
 		default:
 			return T1;
