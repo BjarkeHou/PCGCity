@@ -81,12 +81,21 @@ public class MapHandler {
 	}
 	
 	private static BufferedImage translateMap(Map map, BufferedImage outMap, ArrayList<Agent> agents, boolean showAgents) {
+		int lowX = map.getStartPos().x();
+		int lowY = map.getStartPos().y();
+		int highX = map.getStartPos().x();
+		int highY = map.getStartPos().y();
+		
 		for (int y = 0; y < map.getHeight(); y++) {
 			for (int x = 0; x < map.getWidth(); x++) {
 				Point2i point = new Point2i(x, y);
 				Field field = map.getField(point);
 				if(field.building != BUILDING.NONE) {
 					// Der er bygning på feltet.
+					if(x < lowX) lowX = x;
+					if(x > highX) highX = x;
+					if(y < lowY) lowY = y;
+					if(y > highY) highY = y;
 					//pixels[y*map.getWidth() + x] = getColorForBuildingType(map.getField(point).buildingType);
 					outMap.setRGB(x, y, getColorForBuilding(field.building));
 				} else {
