@@ -66,7 +66,8 @@ public class MapHandler {
 		img = translateMap(map, img, agents, showAgents);
 		
 		//File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
-		File file = new File("C:\\Users\\Oragada\\Desktop\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
+		//File file = new File("C:\\Users\\Oragada\\Desktop\\PCGCity\\PCGCity_generated_map_ts" + timeStep + ".png");
+		File file = new File(path + "PCGCity_generated_map_ts" + timeStep + ".png");
 		try {
 			ImageIO.write(img, "png", file);
 		} catch (IOException e) {
