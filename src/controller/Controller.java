@@ -90,18 +90,21 @@ public class Controller {
 		//Retire old agents
 		for(Agent a : agentsToRemove) agents.remove(a);
 		
-		currentTimeStep++;
-		
 		if(sim.isSimulating()) {
 			if(sim.writeFiles() && timestep%sim.writeRate() == 0)
 				MapHandler.writeMapToFile(map, currentTimeStep, agents, sim.getPathToWriteFiles(), sim.showAgents());
+			
+			currentTimeStep++;
 			return;
 		}
+		
 		gui.setAmountOfAgentsLbl(agents.size());
 
 		//Update map
 		if(gui.writeFiles() && timestep%gui.getWriteFileRate() == 0)
 			MapHandler.writeMapToFile(map, currentTimeStep, agents, gui.getPathToWriteFiles(), gui.showAgents());
+		
+		currentTimeStep++;
 		gui.setCurrentTimeStep(currentTimeStep);
 		gui.updateProgressBar(currentTimeStep);
 		gui.setCurrentMap(MapHandler.convertMapToImage(map, agents, gui.showAgents()));
