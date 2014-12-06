@@ -63,6 +63,7 @@ public class MapHandler {
 	public static void writeMapToFile(Map map, int timeStep, ArrayList<Agent> agents, String path, boolean showAgents) {
 
 		BufferedImage img = new BufferedImage(map.getWidth(), map.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		System.out.println("Timestep: " + timeStep);
 		img = translateMap(map, img, agents, showAgents);
 		
 		//File file = new File("/Users/bjarkehou/Desktop/PCGCity/PCGCity_generated_map_ts" + timeStep + ".png");
@@ -82,10 +83,21 @@ public class MapHandler {
 	}
 	
 	private static BufferedImage translateMap(Map map, BufferedImage outMap, ArrayList<Agent> agents, boolean showAgents) {
-		int lowX = map.getStartPos().x();
-		int lowY = map.getStartPos().y();
-		int highX = map.getStartPos().x();
-		int highY = map.getStartPos().y();
+		//int 0 lowX = map.getStartPos().x();
+		//int 1 lowY = map.getStartPos().y();
+		//int 2 highX = map.getStartPos().x();
+		//int 3 highY = map.getStartPos().y();
+		int[] hut = new int[4];
+		int[] house = new int[4];
+		int[] townhouse = new int[4];
+		for (int i = 0; i<4; i++){
+			if(i%2 == 0) hut[i] = map.getStartPos().x();
+			else hut[i] = map.getStartPos().y();
+			
+			house[i] = hut[i];
+			townhouse[i] = hut[i];
+		}
+		
 		
 		for (int y = 0; y < map.getHeight(); y++) {
 			for (int x = 0; x < map.getWidth(); x++) {
@@ -93,10 +105,19 @@ public class MapHandler {
 				Field field = map.getField(point);
 				if(field.building != BUILDING.NONE) {
 					// Der er bygning på feltet.
-					if(x < lowX) lowX = x;
-					if(x > highX) highX = x;
-					if(y < lowY) lowY = y;
-					if(y > highY) highY = y;
+					switch (field.building){
+					case HUT:
+						hut = setNewVals(hut, x, y);
+						break;
+					case HOUSE:
+						house = setNewVals(house, x, y);
+						break;
+					case TOWNHOUSE:
+						townhouse = setNewVals(townhouse, x, y);
+						break;
+					default:
+						break;
+					}
 					//pixels[y*map.getWidth() + x] = getColorForBuildingType(map.getField(point).buildingType);
 					outMap.setRGB(x, y, getColorForBuilding(field.building));
 				} else {
@@ -114,9 +135,22 @@ public class MapHandler {
 				
 			}
 		}
+		System.out.println(String.format("Hut: X: %d to %d. Y: %d to %d. Variance %d and %d (%d combined)", hut[0], hut[2], hut[1], hut[3],hut[2]-hut[0], hut[3]-hut[1], (hut[2]-hut[0] + hut[3]-hut[1]) /2));
+		System.out.println(String.format("House: X: %d to %d. Y: %d to %d. Variance %d and %d (%d combined)", house[0], house[2], house[1], house[3],house[2]-house[0], house[3]-house[1], (house[2]-house[0] + house[3]-house[1]) /2));
+		System.out.println(String.format("Townhouse: X: %d to %d. Y: %d to %d. Variance %d and %d (%d combined)", townhouse[0], townhouse[2], townhouse[1], townhouse[3],townhouse[2]-townhouse[0], townhouse[3]-townhouse[1], (townhouse[2]-townhouse[0] + townhouse[3]-townhouse[1]) /2));
 		return outMap;
 	}
 	
+	private static int[] setNewVals(int[] arr, int x, int y) {
+		int[] nArr = arr.clone();
+		if(arr[0] > x) nArr[0] = x;
+		if(arr[1] > y) nArr[1] = y;
+		if(arr[2] < x) nArr[2] = x;
+		if(arr[3] < y) nArr[3] = y;
+		return nArr;
+		
+	}
+
 	private static int getColorForBuilding(BUILDING building) {
 		switch (building) {
 		case STARTPOSITION:

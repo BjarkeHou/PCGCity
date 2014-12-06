@@ -2,23 +2,26 @@ package util;
 
 public class MySimulator {
 
-	private boolean isChristian = false;
+	private boolean isChristian = true;
 	private boolean isSimulating = true;
 	
 	// Simulation
 	private int fertilityRate = 10;
-	private int maxTimeSteps = 200;
+	private int maxTimeSteps = 500;
 	
 	// Write files
 	private boolean writeFiles = true;
-	private int writeRate = 10;
-	private boolean showAgents = true;
-	private String pathToWriteFileForChristian = "";
+	private int writeRate = 50;
+	private boolean showAgents = false;
+	private String pathToWriteFileForChristian = "C:\\Users\\Oragada\\Desktop\\PCGCity\\";
 	private String pathToWriteFileForBjarke = "/Users/bjarkehou/Desktop/PCGCity/";
 	
 	// Load files
 	private String[] pathToAgentsForChristian = {
-			""
+			"C:\\Users\\Oragada\\Stuff\\Documents\\Google Drive\\PCGCity\\agents\\HutAgent.json",
+			"C:\\Users\\Oragada\\Stuff\\Documents\\Google Drive\\PCGCity\\agents\\HouseAgent.json",
+			"C:\\Users\\Oragada\\Stuff\\Documents\\Google Drive\\PCGCity\\agents\\StoreAgent.json",
+			"C:\\Users\\Oragada\\Stuff\\Documents\\Google Drive\\PCGCity\\agents\\TownHouseAgent.json"
 	};
 	private String[] pathToAgentsForBjarke = {
 			"/Users/bjarkehou/Google Drive/PCGCity/agents/HutAgent.json",
@@ -26,7 +29,7 @@ public class MySimulator {
 			"/Users/bjarkehou/Google Drive/PCGCity/agents/StoreAgent.json",
 			"/Users/bjarkehou/Google Drive/PCGCity/agents/TownHouseAgent.json",
 	};
-	private String pathToMapForChristian = "";
+	private String pathToMapForChristian = "C:\\Users\\Oragada\\Stuff\\Documents\\Google Drive\\PCGCity\\maps\\map256.png";
 	private String pathToMapForBjarke = "/Users/bjarkehou/Google Drive/PCGCity/maps/map256.png";
 	
 
