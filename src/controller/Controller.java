@@ -5,6 +5,7 @@ import gui.AppWindow;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import model.BUILDING;
 import model.Map;
@@ -71,9 +72,10 @@ public class Controller {
 	}
 
 	private void timeStep(int timestep) {
-		ArrayList<Agent> agentsToRemove = new ArrayList<Agent>();
+		//ArrayList<Integer> agentsToRemove = new ArrayList<Integer>();
 
-		for (Agent agent : agents) {
+		for(Iterator<Agent> iterator = agents.iterator(); iterator.hasNext();) {
+			Agent agent = iterator.next();
 			//Building
 			if(agent.testCurrentField()) {
 				map.changeBuildingOnField(agent.getPos(), agent.getBuilder(), timestep);
@@ -83,11 +85,28 @@ public class Controller {
 			//Moving
 			agent.move(currentTimeStep);
 			//Retirement
-			if(agent.getRetirementStatus()) agentsToRemove.add(agent);
+			if(agent.getRetirementStatus()) iterator.remove();
 		}
+		
+		
+//		for (Agent agent : agents) {
+//			//Building
+//			if(agent.testCurrentField()) {
+//				map.changeBuildingOnField(agent.getPos(), agent.getBuilder(), timestep);
+//				if(!buildingList.contains(agent.getPos()))
+//					buildingList.add(agent.getPos());
+//			}
+//			//Moving
+//			agent.move(currentTimeStep);
+//			//Retirement
+//			System.out.println(agent.getRetirementStatus() + " ");
+//			if(agent.getRetirementStatus()) agentsToRemove.add(agents.indexOf(agent));
+//		}
 
+		
 		//Retire old agents
-		for(Agent a : agentsToRemove) agents.remove(a);
+		//for(Integer i : agentsToRemove) agents.remove(i);
+		agents.trimToSize();
 		
 		boolean writeFiles = sim.isSimulating() ? sim.writeFiles() : gui.writeFiles();
 		int writeRate = sim.isSimulating() ? sim.writeRate() : gui.getWriteFileRate();
@@ -95,8 +114,8 @@ public class Controller {
 		boolean showAgents = sim.isSimulating() ? sim.showAgents() : gui.showAgents();
 		
 		if(writeFiles && timestep%writeRate == 0) {
-			MapHandler.writeMapToFile(map, currentTimeStep, agents, path, showAgents);
-			System.out.println("Time elapsed : " + totalTime.getElapsedTime() + " at timestep " + timestep);
+			//MapHandler.writeMapToFile(map, currentTimeStep, agents, path, showAgents);
+			System.out.println("Time elapsed : " + totalTime.getElapsedTime() + " Timestep : " + timestep + " Agents : " + agents.size());
 		}
 		
 		currentTimeStep++;
@@ -109,12 +128,12 @@ public class Controller {
 
 		//Update map
 		if(gui.writeFiles() && timestep%gui.getWriteFileRate() == 0)
-			MapHandler.writeMapToFile(map, currentTimeStep, agents, gui.getPathToWriteFiles(), gui.showAgents());
+			MapHandler.writeMapToFile(map, currentTimeStep, agents, path, showAgents);
 		
 		currentTimeStep++;
 		gui.setCurrentTimeStep(currentTimeStep);
 		gui.updateProgressBar(currentTimeStep);
-		gui.setCurrentMap(MapHandler.convertMapToImage(map, agents, gui.showAgents()));
+		gui.setCurrentMap(MapHandler.convertMapToImage(map, agents, showAgents));
 	}
 
 	private void performHappyTime() {

@@ -114,7 +114,6 @@ public class Agent {
 	protected Point2i dirToField(Point2i field){
 		Point2i vec = currentPos.vecToOther(field);
 		return vec.GetDirUnit();
-		
 	}
 
 	protected double distToField(Point2i field){
