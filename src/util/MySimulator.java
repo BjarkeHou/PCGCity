@@ -3,7 +3,7 @@ package util;
 public class MySimulator {
 
 	private boolean isChristian = false;
-	private boolean isSimulating = true;
+	private boolean isSimulating = false;
 	
 	// Simulation
 	private int fertilityRate = 10;
