@@ -1,5 +1,8 @@
 package util;
 
+// This is taken from a stackoverflow post.
+// Link: http://stackoverflow.com/questions/8255738/is-there-a-stopwatch-in-java
+
 public class StopWatch {
 
 	  private long startTime = 0;

@@ -7,7 +7,7 @@ public class MySimulator {
 	
 	// Simulation
 	private int fertilityRate = 10;
-	private int maxTimeSteps = 1001;
+	private int maxTimeSteps = 20001;
 	
 	// Write files
 	private boolean writeFiles = true;
@@ -30,7 +30,7 @@ public class MySimulator {
 			"/Users/bjarkehou/Google Drive/PCGCity/agents/TownHouseAgent.json",
 	};
 	private String pathToMapForChristian = "C:\\Users\\Oragada\\Stuff\\Documents\\Google Drive\\PCGCity\\maps\\map256.png";
-	private String pathToMapForBjarke = "/Users/bjarkehou/Google Drive/PCGCity/maps/map256.png";
+	private String pathToMapForBjarke = "/Users/bjarkehou/Google Drive/PCGCity/maps/map128.png";
 	
 
 	
