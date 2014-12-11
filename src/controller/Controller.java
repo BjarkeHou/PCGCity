@@ -13,11 +13,8 @@ import util.MapHandler;
 import util.MySimulator;
 import util.Point2i;
 import util.Rand;
+import util.StopWatch;
 import agent.Agent;
-import agent.HouseAgent;
-import agent.HutAgent;
-import agent.rule.AgentBirth;
-import agent.rule.Restriction;
 
 public class Controller {
 	private ArrayList<Agent> agents;
@@ -27,6 +24,7 @@ public class Controller {
 	private AppWindow gui;
 	private AgentHandler agentHandler;
 	private MySimulator sim;
+	private StopWatch totalTime;
 
 	private int currentTimeStep = 0;
 
@@ -36,7 +34,8 @@ public class Controller {
 
 	public Controller() {
 		sim = new MySimulator();
-
+		
+		totalTime = new StopWatch();
 		agents = new ArrayList<Agent>();
 		agentHandler = new AgentHandler();
 		buildingList = new ArrayList<Point2i>();
@@ -52,22 +51,22 @@ public class Controller {
 	}
 
 	public void doRestOfTimeSteps(int totalTimeSteps) {
+		totalTime.start();
 		while(currentTimeStep < totalTimeSteps) {
 			doOneTimeStep();
 		}
+		totalTime.stop();
+		System.out.println("Total time used: " + totalTime.getElapsedTime());
 	}
 
 	public void doOneTimeStep() {
+		
 		timeStep(currentTimeStep);
 
-		if(sim.isSimulating()) {
-			if(currentTimeStep%sim.getFertilityRate() == 0){
-				performHappyTime();
-			}
-		} else {
-			if(currentTimeStep%gui.getFertilityRate() == 0){
-				performHappyTime();
-			} 
+		int fertilityRate = sim.isSimulating() ? sim.getFertilityRate() : gui.getFertilityRate();
+		
+		if(currentTimeStep%fertilityRate == 0){
+			performHappyTime();
 		}
 	}
 
@@ -90,13 +89,21 @@ public class Controller {
 		//Retire old agents
 		for(Agent a : agentsToRemove) agents.remove(a);
 		
-		if(sim.isSimulating()) {
-			if(sim.writeFiles() && timestep%sim.writeRate() == 0)
-				MapHandler.writeMapToFile(map, currentTimeStep, agents, sim.getPathToWriteFiles(), sim.showAgents());
-			
-			currentTimeStep++;
-			return;
+		boolean writeFiles = sim.isSimulating() ? sim.writeFiles() : gui.writeFiles();
+		int writeRate = sim.isSimulating() ? sim.writeRate() : gui.getWriteFileRate();
+		String path = sim.isSimulating() ? sim.getPathToWriteFiles() : gui.getPathToWriteFiles();
+		boolean showAgents = sim.isSimulating() ? sim.showAgents() : gui.showAgents();
+		
+		if(writeFiles && timestep%writeRate == 0) {
+			MapHandler.writeMapToFile(map, currentTimeStep, agents, path, showAgents);
+			System.out.println("Time elapsed : " + totalTime.getElapsedTime() + " at timestep " + timestep);
 		}
+		
+		currentTimeStep++;
+		
+		
+		if(sim.isSimulating())
+			return;
 		
 		gui.setAmountOfAgentsLbl(agents.size());
 

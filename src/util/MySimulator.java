@@ -2,12 +2,12 @@ package util;
 
 public class MySimulator {
 
-	private boolean isChristian = true;
+	private boolean isChristian = false;
 	private boolean isSimulating = true;
 	
 	// Simulation
 	private int fertilityRate = 10;
-	private int maxTimeSteps = 500;
+	private int maxTimeSteps = 1001;
 	
 	// Write files
 	private boolean writeFiles = true;
