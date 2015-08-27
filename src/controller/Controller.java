@@ -114,7 +114,7 @@ public class Controller {
 		boolean showAgents = sim.isSimulating() ? sim.showAgents() : gui.showAgents();
 		
 		if(writeFiles && timestep%writeRate == 0) {
-			//MapHandler.writeMapToFile(map, currentTimeStep, agents, path, showAgents);
+			MapHandler.writeMapToFile(map, currentTimeStep, agents, path, showAgents);
 			System.out.println("Time elapsed : " + totalTime.getElapsedTime() + " Timestep : " + timestep + " Agents : " + agents.size());
 		}
 		
